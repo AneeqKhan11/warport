@@ -1,0 +1,28 @@
+{
+    "development": {
+        "port": "",
+        "graphql_endpoint": "graphql",
+        "backend_domain": "http://159.223.93.212:5433",
+        "graphql_subscription_domain": "ws://18.141.132.206:8080",
+        "graphql_subscription_endpoint": "subscriptions",
+        "upload_dir":"/uploads"
+    },
+    "test": {
+        "port": 8080,
+        "graphql_endpoint": "graphql",
+        "backend_domain": "http://18.141.132.206:8080",
+        "graphql_subscription_domain": "ws://18.141.132.206:8080",
+        "graphql_subscription_endpoint": "subscriptions",
+        "upload_dir":"/uploads"
+       
+    },
+    "production": {
+        "port": "",
+        "graphql_endpoint": "graphql",
+        "backend_domain": "http://159.223.93.212:5433",
+        "graphql_subscription_domain": "ws://18.141.132.206:8080",
+        "graphql_subscription_endpoint": "subscriptions",
+        "upload_dir":"/uploads"
+       
+    }
+}
