@@ -91,10 +91,18 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   submitButton: {
+    width: 200,
+    minWidth: 55,
+    minHeight: 40,
+    alignSelf: 'center',
+    borderRadius: 0
+  },
+  submitButton1: {
     width: 80,
     minWidth: 55,
     minHeight: 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    alignItems: 'center'
   },
   submitButtonText: {
     marginHorizontal: 0,
@@ -102,14 +110,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     height: 25,
   },
+  submitButtonText1: {
+    marginHorizontal: 0,
+    fontSize: 13,
+    paddingHorizontal: 0,
+    height: 25,
+  },
+
   submitButtonContent: {
     height: 30,
+    width: 200
   },
   priceSaleInputContainer: {},
   descriptionInputContainer: {
     flexGrow: 1,
     minHeight: 140,
     maxHeight: 'auto',
+    borderRadius: 0
   },
   descriptionInput: {
     flexGrow: 1,
@@ -126,6 +143,7 @@ const styles = StyleSheet.create({
   titleTextField: {
     flex: 1,
     width: 'auto',
+    borderRadius: 0,
   },
   colorPickerContainer: {
     flexDirection: 'row',
@@ -136,13 +154,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
 
+    marginBottom: 20
   },
   discountModalButtonLabel: {
     fontSize: 15,
 
   },
   discountModalButton: {
-
     maxWidth: "70%"
   },
   discountDiscription: {
@@ -182,7 +200,9 @@ const styles = StyleSheet.create({
   },
   priceTextField: {
     marginVertical: 0,
-    marginTop: 5,
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 0
   },
   // aCategoryText1:{
   //   marginBottom:-15,
@@ -777,12 +797,12 @@ function AddEditProduct(props) {
           ) : (
             <LoadingButton
               contentStyle={styles.submitButtonContent}
-              textStyle={styles.submitButtonText}
+              textStyle={styles.submitButtonText1}
               disabled={props.addEditProductLoading}
               loading={props.addEditProductLoading}
               mode="contained"
               onPress={onAddPressed}
-              style={styles.submitButton}
+              style={styles.submitButton1}
             >
               {!props.addEditProductLoading && translation('Save')}
             </LoadingButton>
@@ -790,9 +810,7 @@ function AddEditProduct(props) {
         </BackButtonWithTitleAndComponent>
 
 
-        <ImageBackground
-          source={require('../../../../assets/background.jpeg')}
-          resizeMode="repeat"
+        <View
           style={styles.formContainer}
         >
           {/* <ScrollView
@@ -800,7 +818,7 @@ function AddEditProduct(props) {
           contentContainerStyle={styles.scrollContentContainer}
           style={styles.scroll}
         > */}
-          <View>
+          <View style={{ marginBottom: 100, marginTop: 10 }}>
             <ProductsSlider
               onAddImagePress={() => {
                 props.setVendorBottomDrawerToggle(true)
@@ -863,15 +881,15 @@ function AddEditProduct(props) {
               }
             />
             <Text style={{
-              marginTop: 10,
+              marginBottom: 10,
               fontSize: 14,
               color: 'white',
               backgroundColor: "blue",
               borderColor: 'blue',
               borderWidth: 3,
               width: '70%',
-              paddingLeft: 10,
-              paddingTop: 5
+              // paddingLeft: 10,
+              // paddingTop: 5
             }}>{translation('Product Price Range (PKR)')}</Text>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <TextInput
@@ -945,6 +963,10 @@ function AddEditProduct(props) {
               value={selectedUom}
               setValue={setSelectedUom}
               list={uomList}
+              style={{
+                Background: '#FFF'
+              }}
+
             />
 
             <TextInput
@@ -993,50 +1015,56 @@ function AddEditProduct(props) {
               {!props.addEditProductLoading && translation('Save')}
             </LoadingButton>
 
-            <Text style={{
-              marginTop: 10,
-              fontSize: 14,
-              color: 'white',
-              backgroundColor: "blue",
-              borderColor: 'blue',
-              borderWidth: 3,
-              width: '30%',
-              paddingLeft: 10,
-              paddingTop: 5
-            }}>Optional</Text>
-            <TextInput
-              keyboardType='numeric'
-              containerStyle={[styles.titleTextField, { width: "50%" }]}
-              placeholder={translation('Enter Length')}
-              returnKeyType="next"
-              value={length}
-              onChangeText={(text) =>
-                setLength(text)
-              }
-            />
-            <TextInput
-              keyboardType='numeric'
-              containerStyle={[styles.titleTextField, { width: "50%" }]}
-              placeholder={translation('Enter Width')}
-              returnKeyType="next"
-              value={width}
-              onChangeText={(text) =>
-                setWidth(text)
-              }
-            />
-            <TextInput
-              containerStyle={[styles.titleTextField, { width: "50%" }]}
-              placeholder={translation('Enter Height')}
-              keyboardType='numeric'
-              returnKeyType="next"
-              value={height}
-              onChangeText={(text) =>
-                setHeight(text)
-              }
-            />
+            <View style={{
+              alignItems: 'center',
+            }}>
+              <Text style={{
+                marginTop: 15,
+                fontSize: 14,
+                color: 'white',
+                backgroundColor: "#402798",
+                width: '30%',
+                padding: 10,
+                textAlign: 'center'
+              }}>Optional</Text>
+            </View>
+            <View style={{
+              alignItems: 'center'
+            }}>
+              <TextInput
+                keyboardType='numeric'
+                containerStyle={[styles.titleTextField, { width: "100%" }]}
+                placeholder={translation('Enter Length')}
+                returnKeyType="next"
+                value={length}
+                onChangeText={(text) =>
+                  setLength(text)
+                }
+              />
+              <TextInput
+                keyboardType='numeric'
+                containerStyle={[styles.titleTextField, { width: "100%" }]}
+                placeholder={translation('Enter Width')}
+                returnKeyType="next"
+                value={width}
+                onChangeText={(text) =>
+                  setWidth(text)
+                }
+              />
+              <TextInput
+                containerStyle={[styles.titleTextField, { width: "100%" }]}
+                placeholder={translation('Enter Height')}
+                keyboardType='numeric'
+                returnKeyType="next"
+                value={height}
+                onChangeText={(text) =>
+                  setHeight(text)
+                }
+              />
+            </View>
           </View>
-        </ImageBackground>
-        <BottomDrawerContent
+        </View>
+        {/* <BottomDrawerContent
           onCameraPress={() => {
             //props.setVendorBottomDrawerIndex(1)
             ImagePicker.openCamera({
@@ -1079,7 +1107,7 @@ function AddEditProduct(props) {
             props.setVendorBottomDrawerToggle(false)
           }}
           navigation={props.navigation}
-        />
+        /> */}
 
 
 

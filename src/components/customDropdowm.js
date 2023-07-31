@@ -5,11 +5,11 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     dropdownContainer: {
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 50,
-        padding: 10,
-        marginTop: 10,
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        borderRadius: 0,
+        padding: 5,
+        marginTop: 20,
         backgroundColor: "#FFF",
         ...Platform.select({
             ios: {
@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 5,
+        backgroundColor: 'yellow',
+        width: 300
     },
     colorBox: {
         width: 24,
@@ -56,7 +58,6 @@ const styles = StyleSheet.create({
 });
 
 export default function CustomDropDown({ label, value, list, setValue }) {
-    console.log("🚀 ~ file: customDropdowm.js:46 ~ CustomDropDown ~ value:", value)
     const [showDropDown, setShowDropDown] = useState(false);
 
     const handleColorSelect = (selectedValue) => {
@@ -82,8 +83,11 @@ export default function CustomDropDown({ label, value, list, setValue }) {
 
     return (
         <View style={styles.dropdownContainer}>
-            <TouchableOpacity onPress={handlePress}>
-                <Text>{label}</Text>
+            <TouchableOpacity style={{
+                display:'flex',
+                alignItems:'center'
+            }} onPress={handlePress}>
+                <Text style={{textAlign:"left"}}>{label}</Text>
             </TouchableOpacity>
             {showDropDown && (
                 <View >
