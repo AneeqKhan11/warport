@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginTop: 4,
+    marginRight: 15,
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'flex-end'
   },
   forgot: {
     fontSize: 13,
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   },
   link: {
     fontWeight: 'bold',
+    textAlign: "right",
     color: theme.colors.primary,
   },
   forgotPasswordButtonLabelStyle: {
@@ -296,93 +297,98 @@ function LoginScreen(props) {
   return (
     <View style={{
       flex: 1,
+      marginHorizontal: 10,
       backgroundColor: "#FFF"
     }}>
-      <Background>
-        {
-          alertVisible && <AlertView message={alertMessage} ok={true} visible={setAlertVisible}></AlertView>
-        }
-        <BackButtonWithLanguageMenu goBack={props.navigation.goBack} showBackButton={false} />
+
+      <BackButtonWithLanguageMenu
+        goBack={props.navigation.goBack}
+        showBackButton={false}
+      />
+      <View style={{ alignItems: "center", marginTop: 60 }}>
         <Logo />
-        <Header style={styles.forSupplierHeader}>{translation('For Suppliers')}</Header>
-        <Header>{translation('Welcome back.')}</Header>
-        <View style={styles.loginView}>
-          <PhoneNumberInput
-            containerStyle={{ borderRadius: 50, }}
-            disabled={props.loginLoading}
-            placeholder={translation('Contact Number')}
-            value={props.loginContactNo.value}
-            initialCallingCode={selectedLanguageLocale.callingCode}
-            initialCountryCode={selectedLanguageLocale.countryCode}
-            error={!!props.loginContactNo.error}
-            errorText={translation(props.loginContactNo.error)}
-            onChangeText={(text, countryCode, callingCode) =>
-              props.setLoginContactNo({
-                value: text,
-                error: '',
-                country_code: countryCode,
-                calling_code: callingCode,
-              })
-            }
-          />
-          <TextInput
-            autoCapitalize="none"
-            disabled={props.loginLoading}
-            placeholder={translation('Password')}
-            returnKeyType="done"
-            value={props.loginPassword.value}
-            onChangeText={(text) =>
-              props.setLoginPassword({ value: text, error: '' })
-            }
-            error={!!props.loginPassword.error}
-            errorText={translation(props.loginPassword.error)}
-            secureTextEntry
-            inputStyle={{ borderRadius: 12, paddingHorizontal :20}}
-          />
-          <View style={styles.checkboxContainer}>
-            {/* <Switch
+      </View>
+      {/* <Header style={styles.forSupplierHeader}>{translation('For Suppliers')}</Header> */}
+      <View style={{ alignItems: "center" }}>
+        <Header
+        >{translation('Welcome back.')}</Header>
+      </View>
+      <View style={styles.loginView}>
+        <PhoneNumberInput
+          containerStyle={{ borderRadius: 50, }}
+          disabled={props.loginLoading}
+          placeholder={translation('Contact Number')}
+          value={props.loginContactNo.value}
+          initialCallingCode={selectedLanguageLocale.callingCode}
+          initialCountryCode={selectedLanguageLocale.countryCode}
+          error={!!props.loginContactNo.error}
+          errorText={translation(props.loginContactNo.error)}
+          onChangeText={(text, countryCode, callingCode) =>
+            props.setLoginContactNo({
+              value: text,
+              error: '',
+              country_code: countryCode,
+              calling_code: callingCode,
+            })
+          }
+        />
+        <TextInput
+          autoCapitalize="none"
+          disabled={props.loginLoading}
+          placeholder={translation('Password')}
+          returnKeyType="done"
+          value={props.loginPassword.value}
+          onChangeText={(text) =>
+            props.setLoginPassword({ value: text, error: '' })
+          }
+          error={!!props.loginPassword.error}
+          errorText={translation(props.loginPassword.error)}
+          secureTextEntry
+          inputStyle={{ borderRadius: 12, paddingHorizontal: 20 }}
+        />
+        <View style={styles.checkboxContainer}>
+          {/* <Switch
               value={rememberMe}
               onValueChange={setRememberMe}
             /><Text style={styles.rememberMeText}>Remember Me</Text> */}
-            <View style={styles.forgotPassword}>
-              <Button
-                labelStyle={styles.forgotPasswordButtonLabelStyle}
-                onPress={() => props.navigation.navigate('ResetPasswordScreen')}
-              >
-                <Text style={styles.forgot}>
-                  {translation('Forgot your password?')}
-                </Text>
-              </Button>
-            </View>
-          </View>
-          <LoadingButton
-            style={{ marginTop: -10 }}
-            disabled={props.loginLoading}
-            loading={props.loginLoading}
-            mode="contained"
-            onPress={onLoginPressed}
-          >
-            {translation('Login')}
-          </LoadingButton>
-          <View style={styles.row}>
-            <Text>{translation('Don’t have an account?')} </Text>
-
+          <View style={styles.forgotPassword}>
             <Button
-              style={styles.registerButton}
-              labelStyle={styles.registerButtonLabelStyle}
-              contentStyle={styles.registerButtonContentStyle}
-              onPress={() => props.navigation.replace('RegisterScreen')}
+              labelStyle={styles.forgotPasswordButtonLabelStyle}
+              onPress={() => props.navigation.navigate('ResetPasswordScreen')}
             >
-              <Text style={styles.link}>{translation('Sign up')}</Text>
+              <Text style={styles.forgot}>
+                {translation('Forgot your password?')}
+              </Text>
             </Button>
           </View>
         </View>
-        <HideOnKeyboardShow>
-          {/* <TouchableOpacity style={styles.termsStyle}>
+        <LoadingButton
+          style={{ marginTop: -10 }}
+          disabled={props.loginLoading}
+          loading={props.loginLoading}
+          mode="contained"
+          onPress={onLoginPressed}
+        >
+          {translation('Login')}
+        </LoadingButton>
+      </View>
+      <View style={styles.row}>
+        <Text>{translation('Don’t have an account?')} </Text>
+
+        <Button
+          style={styles.registerButton}
+          labelStyle={styles.registerButtonLabelStyle}
+          contentStyle={styles.registerButtonContentStyle}
+          onPress={() => props.navigation.replace('RegisterScreen')}
+        >
+          <Text style={styles.link}>{translation('Sign up')}</Text>
+        </Button>
+      </View>
+      <HideOnKeyboardShow>
+        {/* <TouchableOpacity style={styles.termsStyle}>
       <Text style={styles.termsText}>{translation('Terms And Conditions')}</Text>
       </TouchableOpacity> */}
-        </HideOnKeyboardShow>
-      </Background>
+      </HideOnKeyboardShow>
     </View>
   )
 }

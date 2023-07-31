@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Text,Button, Colors } from 'react-native-paper'
+import { Text, Button, Colors } from 'react-native-paper'
 import Background from '../components/Background'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
@@ -32,7 +32,10 @@ import AlertView from '../context/AlertView'
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    marginTop: 4,
+    marginRight: 25,
+    marginTop: -15,
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
   link: {
     fontWeight: 'bold',
@@ -41,35 +44,35 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 24,
   },
-  loginButtonLabelStyle:{
+  loginButtonLabelStyle: {
     textTransform: 'none',
     paddingLeft: 2,
-    paddingRight:2,
+    paddingRight: 2,
     height: 18,
     letterSpacing: 0,
     marginHorizontal: 0,
     marginVertical: 0,
 
   },
-  loginButton:{
-    minWidth:0
+  loginButton: {
+    minWidth: 0
   },
-  forSupplierHeader:{
-    fontSize:15,
-    paddingVertical:0,
+  forSupplierHeader: {
+    fontSize: 15,
+    paddingVertical: 0,
   },
-  registerView:{
-    width:"100%",
-    padding:20,
-    borderRadius:10,
+  registerView: {
+    width: "100%",
+    padding: 20,
+    borderRadius: 10,
     // backgroundColor:Colors.white
   },
-  termsStyle:{
-    position:'absolute',
-    bottom:"-10%"
+  termsStyle: {
+    position: 'absolute',
+    bottom: "-10%"
   },
-  termsText:{
-    color:theme.colors.primary
+  termsText: {
+    color: theme.colors.primary
   }
 })
 
@@ -80,7 +83,7 @@ export function RegisterScreen(props) {
   const { alertWithType } = useDropdownAlert()
   const [message, setMessage] = useState('')
   const selectedLanguageLocale = languages[getLanguageCodeFromLS()]
-  const handleBackPress = ()=>{
+  const handleBackPress = () => {
     navigation.goBack()
     return true
   }
@@ -119,14 +122,14 @@ export function RegisterScreen(props) {
   }, [checkContactNoUserExistMutationError])
 
   useEffect(() => {
-    
-    if(props.registerContactNo.value.length == 13){
-      const contactNoError = contactNoValidator(props.registerContactNo.value.slice(1,13))
-      console.log(props.registerContactNo.value.slice(1,13))
+
+    if (props.registerContactNo.value.length == 13) {
+      const contactNoError = contactNoValidator(props.registerContactNo.value.slice(1, 13))
+      console.log(props.registerContactNo.value.slice(1, 13))
       console.log(contactNoError)
       if (!contactNoError) {
         props.setRegisterContactNo({
-          value: props.registerContactNo.value.slice(1,13),
+          value: props.registerContactNo.value.slice(1, 13),
           error: contactNoError,
           country_code: props.registerContactNo.country_code,
           calling_code: props.registerContactNo.calling_code,
@@ -221,7 +224,7 @@ export function RegisterScreen(props) {
     } catch (ex) {
       props.setRegisterLoading(false)
       console.log(ex)
-      if (ex.networkError){
+      if (ex.networkError) {
         setMessage("Check your Internet Connection")
         setAlertVisible(true)
       }
@@ -231,63 +234,64 @@ export function RegisterScreen(props) {
 
   return (
     <View style={{
-      flex:1,
-      paddingBottom:100
+      flex: 1,
+      marginHorizontal: 10,
+      backgroundColor: "white"
     }}>
-      <Background>
-      {
-        alertVisible && <AlertView title={"WarePort Alert"} message={message} ok={true} visible={setAlertVisible}></AlertView>
-      }
       <BackButtonWithLanguageMenu goBack={props.navigation.goBack} />
+      <View style={{ alignItems: "center", marginTop: 60 }}>
         <Logo />
-      <Header style={styles.forSupplierHeader}>{translation('For Suppliers')}</Header>
-      <Header>{translation('Create Account')}</Header>
+      </View>
+      {/* <Header style={styles.forSupplierHeader}>{translation('For Suppliers')}</Header> */}
+      <View style={{ alignItems: "center" }}>
+        <Header
+        >{translation('Welcome back.')}</Header>
+      </View>
       <View style={styles.registerView}>
-      <PhoneNumberInput
-        disabled={props.registerLoading}
-        placeholder={translation('Contact Number')}
-        value={props.registerContactNo.value}
-        initialCallingCode={selectedLanguageLocale.callingCode}
-        initialCountryCode={selectedLanguageLocale.countryCode}
-        error={!!props.registerContactNo.error}
-        errorText={translation(props.registerContactNo.error)}
-        onChangeText={(text, countryCode, callingCode) =>
-          props.setRegisterContactNo({
-            value: text,
-            error: '',
-            country_code: countryCode,
-            calling_code: callingCode,
-          })
-        }
-      />
-      <LoadingButton
-        disabled={props.registerLoading}
-        loading={props.registerLoading}
-        mode="contained"
-        onPress={onSignUpPressed}
-        style={styles.submitButton}
-      >
-        {translation('Sign Up')}
-      </LoadingButton>
+        <PhoneNumberInput
+          disabled={props.registerLoading}
+          placeholder={translation('Contact Number')}
+          value={props.registerContactNo.value}
+          initialCallingCode={selectedLanguageLocale.callingCode}
+          initialCountryCode={selectedLanguageLocale.countryCode}
+          error={!!props.registerContactNo.error}
+          errorText={translation(props.registerContactNo.error)}
+          onChangeText={(text, countryCode, callingCode) =>
+            props.setRegisterContactNo({
+              value: text,
+              error: '',
+              country_code: countryCode,
+              calling_code: callingCode,
+            })
+          }
+        />
+        <LoadingButton
+          disabled={props.registerLoading}
+          loading={props.registerLoading}
+          mode="contained"
+          onPress={onSignUpPressed}
+          style={styles.submitButton}
+        >
+          {translation('Sign Up')}
+        </LoadingButton>
+      </View>
       <View style={styles.row}>
         <Text>{translation('Already have an account?')} </Text>
-         
         <Button
-        style={styles.loginButton}
+          style={styles.loginButton}
           labelStyle={styles.loginButtonLabelStyle}
           contentStyle={styles.loginButtonContentStyle}
           onPress={() => props.navigation.replace('LoginScreen')}
         >
           <Text style={styles.link}>{translation('Login')}</Text>
-          </Button>
+        </Button>
       </View>
-      </View>
+
       <HideOnKeyboardShow>
-      {/* <TouchableOpacity style={styles.termsStyle}>
+        {/* <TouchableOpacity style={styles.termsStyle}>
       <Text style={styles.termsText}>{translation('Terms And Conditions')}</Text>
       </TouchableOpacity> */}
       </HideOnKeyboardShow>
-    </Background>
     </View>
   )
 }

@@ -41,6 +41,7 @@ export default function BackButtonWithLanguageMenu({ goBack, showBackButton, sho
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'absolute',
+    right: 20,
     top: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',

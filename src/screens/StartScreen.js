@@ -16,15 +16,14 @@ import BackButtonWithLanguageMenu from '../components/BackButtonWithLanguageMenu
 import { useTranslation } from '../context/Localization'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AlertView from '../context/AlertView'
+import CustomButton from '../components/customButton'
 
 const styles = StyleSheet.create({
   text: {
     marginTop: 20,
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor:"white"
   },
   slugan: {
     fontSize: 15,
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '900',
     fontFamily: 'Roboto',
-    color:"black"
+    color: "black"
   },
   discriptionSecondLine: {
     fontSize: 15,
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '300',
     fontFamily: 'Roboto',
-    color:"black"
+    color: "black"
   },
   discriptionFirstLine: {
     fontSize: 19,
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '900',
     fontFamily: 'Roboto',
-    color:"black"
+    color: "black"
   },
   discriptionSecondLine: {
     fontSize: 15,
@@ -64,16 +63,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '300',
     fontFamily: 'Roboto',
-    color:"black"
-  }, 
+    color: "black"
+  },
 })
 
 export function StartScreen(props) {
   const { translation } = useTranslation()
   const { alertWithType } = useDropdownAlert()
-  const [alertMessage , setAlertMessage] = useState("")
+  const [alertMessage, setAlertMessage] = useState("")
   const [alertVisible, setAlertVisible] = useState(false)
-  const [userId,setUserId] = useState()
+  const [userId, setUserId] = useState()
 
   const getUserId = async () => {
     try {
@@ -83,7 +82,7 @@ export function StartScreen(props) {
       console.log(error);
     }
   };
-  
+
 
   let meMutation = gql`
     mutation me($id: ID!) {
@@ -125,7 +124,7 @@ export function StartScreen(props) {
 
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (meMutationResult) {
         if (meMutationResult.me) {
           if (meMutationResult.me.role == RoleType.Vendor) {
@@ -178,16 +177,16 @@ export function StartScreen(props) {
       })
       .catch(error => console.log(error));
   }, []);
-  
+
 
   useEffect(() => {
-      if (!props.loginInitialLoginLoaded) {
-        if (userId != null) {
-          getUserByUserId(userId)
-        }else{
-          props.setLoginInitLoginLoaded(true)
-        }
+    if (!props.loginInitialLoginLoaded) {
+      if (userId != null) {
+        getUserByUserId(userId)
+      } else {
+        props.setLoginInitLoginLoaded(true)
       }
+    }
   }, [props.loginInitialLoginLoaded])
 
   return (
@@ -206,25 +205,32 @@ export function StartScreen(props) {
         <Text style={styles.slugan}>
           {translation('B2B INDUSTRIAL & COMMERCIAL PORTAL')}
         </Text>
-        <Text style={[styles.discriptionFirstLine,{marginTop:20}]}>
-            {translation('ONE WINDOW B2B E.COMMERCE')}
-          </Text>
-          <Divider/>
-          <Text style={[styles.discriptionSecondLine,{marginTop:10}]}>
-            {translation('CONNECTING REGIONAL SUPPLIERS')}
-          </Text>
-        <Button
+        <Text style={[styles.discriptionFirstLine, { marginTop: 20 }]}>
+          {translation('ONE WINDOW B2B E.COMMERCE')}
+        </Text>
+        <Text style={[styles.discriptionSecondLine, { marginTop: 10 }]}>
+          {translation('CONNECTING REGIONAL SUPPLIERS')}
+        </Text>
+
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <CustomButton
+            navScreen="LoginScreen"
+            heading={"Login"}
+          />
+        </View>
+
+        {/* <Button
           mode="contained"
           onPress={() => props.navigation.navigate('LoginScreen')}
         >
           {translation('Login')}
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => props.navigation.navigate('RegisterScreen')}
-        >
-          {translation('Sign Up')}
-        </Button>
+        </Button> */}
+        <View style={{ width: "100%", marginTop: 10 }}>
+          <CustomButton
+            navScreen="RegisterScreen"
+            heading={"SignUp"}
+          />
+        </View>
       </Background>
     </View>
   )
