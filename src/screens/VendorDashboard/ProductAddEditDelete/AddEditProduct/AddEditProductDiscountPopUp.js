@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import { Modal, Colors} from 'react-native-paper'
+import { Modal, Colors } from 'react-native-paper'
 import { connect } from 'react-redux'
 import {
   setAddEditProductDiscountModalToggle,
@@ -21,19 +21,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalInnerContainer: {
-    marginHorizontal: 12,
-    paddingHorizontal: 9,
-    paddingVertical: 5,
-    backgroundColor: 'white',
+    backgroundColor: "#FFF",
+    padding:20
   },
   modalContainerStyle: {
     flex: 1,
+    paddingHorizontal:20
   },
   textInputContainer: {
-    flex: 1,
+    borderRadius: 0
   },
   textInputMainContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   signText: {
@@ -45,10 +43,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
   },
-  percentageSymbol:{
-    textAlignVertical:"center",
-    fontSize:20,
-    marginLeft:5
+  percentageSymbol: {
+    textAlignVertical: "center",
+    fontSize: 20,
+    marginLeft: 5
   }
 })
 
@@ -64,45 +62,45 @@ function AddEditProductDiscountPopUp(props) {
   const [percentList, setPercentList] = useState([])
   const uomList = [
     {
-        label:"Meter",
-        value:"Meter"
+      label: "Meter",
+      value: "Meter"
     },
     {
-        label:"PCs",
-        value:"PCs"
+      label: "PCs",
+      value: "PCs"
     },
     {
-        label:"Kg",
-        value:"Kg"
+      label: "Kg",
+      value: "Kg"
     },
     {
-        label:"Dzn",
-        value:"Dzn"
+      label: "Dzn",
+      value: "Dzn"
     },
     {
-        label:"Box",
-        value:"Box"
+      label: "Box",
+      value: "Box"
     },
     {
-        label:"CTN",
-        value:"CTN"
+      label: "CTN",
+      value: "CTN"
     },
     {
-        label:"Ft",
-        value:"Ft"
+      label: "Ft",
+      value: "Ft"
     },
     {
-        label:"Inch",
-        value:"Inch"
+      label: "Inch",
+      value: "Inch"
     }
-]
+  ]
 
-useEffect(()=>{
-  for (let i=1; i<100; i++){
-    let StringValue = String(i)
-    setPercentList(old => [...old,{label:StringValue,value:StringValue}])
-  }
-},[])
+  useEffect(() => {
+    for (let i = 1; i < 100; i++) {
+      let StringValue = String(i)
+      setPercentList(old => [...old, { label: StringValue, value: StringValue }])
+    }
+  }, [])
 
   const onSavePressed = async () => {
     const discountPriceError = productDiscountPriceValidator(discountPrice)
@@ -144,22 +142,31 @@ useEffect(()=>{
       visible={props.addEditProductDiscountModalToggle}
       dismissable={true}
       contentContainerStyle={styles.modalContainerStyle}
+      
     >
       <View style={styles.modalInnerContainer}>
-        <View style={{flexDirection:'row'}}>
-        <TouchableOpacity
-          onPress={() => {
-            props.setAddEditProductDiscountModalToggle(false)
-          }}
-        >
-          <Icon
-            name="arrow-left"
-            style={styles.closeIcon}
-            size={24}
-            color="gray"
-          />
-        </TouchableOpacity>
-        <Text style={{fontSize:24, color:'white', backgroundColor:'#449bb6', marginLeft:20, paddingTop:3, paddingHorizontal:5, borderRadius:5}}>{translation("Discount Box")}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity
+            onPress={() => {
+              props.setAddEditProductDiscountModalToggle(false)
+            }}
+          >
+            <Icon
+              name="arrow-left"
+              style={styles.closeIcon}
+              size={24}
+              color="gray"
+            />
+          </TouchableOpacity>
+          <Text style={{
+            fontSize: 24,
+            color: 'black',
+            // backgroundColor: '#449bb6',
+            marginLeft: 70,
+            paddingTop: 3,
+            paddingHorizontal: 5,
+            borderRadius: 5
+          }}>{translation("Discount Box")}</Text>
         </View>
         <View style={styles.textInputMainContainer}>
           <TextInput
@@ -180,46 +187,46 @@ useEffect(()=>{
                 value: props.addEditProductDiscountPrice,
                 error: '',
               })
-              
+
             }}
           />
-        <View style={{marginTop:8,marginLeft:20}}>
-        <DropDown
-                ref={dropdownRef1}
-                label={"UOM"}
-                mode={"outlined"}
-                visible={showDropDown}
-                showDropDown={() => setShowDropDown(true)}
-                onDismiss={() => setShowDropDown(false)}
-                value={selectedUom}
-                setValue={setSelectedUom}
-                list={uomList}
-          />
-        </View>
-          <Text style={styles.signText}>∝</Text>
-          <View style={{marginTop:8,marginLeft:20}}>
+          <View style={{}}>
             <DropDown
-                    label={"%"}
-                    mode={"outlined"}
-                    visible={showPercentDropDown}
-                    error={!!props.addEditProductDiscountPrice.error}
-                    errorText={translation(props.addEditProductDiscountPrice.error)}
-                    showDropDown={() => setShowPercentDropDown(true)}
-                    onDismiss={() => setShowPercentDropDown(false)}
-                    value={discountPrice}
-                    setValue={(text)=>{
-                      setDiscountPrice(text.replace(/[^0-9]/g, ''))
-                      props.setAddEditProductDiscountQuantity({
-                        value: props.addEditProductDiscountQuantity,
-                        error: '',
-                      })
-        
-                      props.setAddEditProductDiscountPrice({
-                        value: props.addEditProductDiscountPrice,
-                        error: '',
-                      })}}
-                    list={percentList}
-              />
+              ref={dropdownRef1}
+              label={"UOM"}
+              mode={"outlined"}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              value={selectedUom}
+              setValue={setSelectedUom}
+              list={uomList}
+            />
+          </View>
+          <View style={{ marginTop: 15 }}>
+            <DropDown
+              label={"%"}
+              mode={"outlined"}
+              visible={showPercentDropDown}
+              error={!!props.addEditProductDiscountPrice.error}
+              errorText={translation(props.addEditProductDiscountPrice.error)}
+              showDropDown={() => setShowPercentDropDown(true)}
+              onDismiss={() => setShowPercentDropDown(false)}
+              value={discountPrice}
+              setValue={(text) => {
+                setDiscountPrice(text.replace(/[^0-9]/g, ''))
+                props.setAddEditProductDiscountQuantity({
+                  value: props.addEditProductDiscountQuantity,
+                  error: '',
+                })
+
+                props.setAddEditProductDiscountPrice({
+                  value: props.addEditProductDiscountPrice,
+                  error: '',
+                })
+              }}
+              list={percentList}
+            />
           </View>
           <TextInput
             label={translation('Percentage')}
@@ -240,7 +247,7 @@ useEffect(()=>{
                 error: '',
               })
             }}
-          /><Text style={styles.percentageSymbol}>%</Text>
+          />
         </View>
         <LoadingButton
           onPress={onSavePressed}

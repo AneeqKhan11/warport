@@ -118,16 +118,16 @@ const SearchPage = () => {
         </View>
         {/* <Text style={styles.comingSoonText}>{translation('Coming Soon')}</Text> */}
         {
-          (UserId==2514 || UserId==2515) ?<CustomButton
-          onPress={() => {
-            navigation.navigate('AddSearchProduct')
-          }}
-          mode={'contained'}
-          textStyle={styles.welcomeCallBtnText}
-          style={styles.welcomeCallBtn}
-        >
-          {translation('Add new Search product')}
-        </CustomButton>:<></>
+        //   (UserId==2514 || UserId==2515) ?<CustomButton
+        //   onPress={() => {
+        //     navigation.navigate('AddSearchProduct')
+        //   }}
+        //   mode={'contained'}
+        //   textStyle={styles.welcomeCallBtnText}
+        //   style={styles.welcomeCallBtn}
+        // >
+        //   {translation('Add new Search product')}
+        // </CustomButton>:<></>
         }
         <FlatList
           data={images}

@@ -110,7 +110,7 @@ const SearchPage = () => {
           }}
           mode={'contained'}
           textStyle={styles.welcomeCallBtnText}
-          style={{}}
+          style={{marginLeft:10, width:'94.5%'}}
         >
           {translation('Add new Search product')}
         </CustomButton> : <></>

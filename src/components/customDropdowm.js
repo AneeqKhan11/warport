@@ -1,14 +1,94 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+
+
+export default function CustomDropDown({ label, value, list, setValue }) {
+    const [showDropDown, setShowDropDown] = useState(false);
+
+    const handleColorSelect = (selectedValue) => {
+        setValue(selectedValue);
+        setShowDropDown(false);
+    };
+
+    const changeCustomColor = (color) => {
+        setValue(color);
+        setShowDropDown(false);
+    };
+
+    const navigation = useNavigation();
+    const handlePress = () => {
+        if (value === 'Custom') {
+            navigation.push('ColorGrid', { onSelect: handleColorSelect, changeCustomColor });
+        } else {
+            setShowDropDown(!showDropDown);
+        }
+    };
+
+    return (
+        <TouchableOpacity onPress={handlePress} style={[styles.dropdownContainer, {
+            flexDirection: !showDropDown ? 'row' : 'column',
+        }]}>
+            <TouchableOpacity style={{
+                display: 'flex',
+            }}>
+                <Text style={{ textAlign: "left", fontSize: 16, color: '#6A6A6A' }}>{label}</Text>
+            </TouchableOpacity>
+            {showDropDown && (
+                <View >
+                    {list.map((color) => (
+                        <TouchableOpacity
+                            key={color.value}
+                            onPress={() => handleColorSelect(color.value)}
+                            style={styles.colorOption}
+                        >
+                            <View
+                                style={[
+                                    styles.colorBox,
+                                    { backgroundColor: color.value },
+                                ]}
+                            />
+                            <Text>{color.label}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            )}
+            {value !== "" && (
+                <View style={{
+                    flexDirection: "row",
+                    alignItems: 'center',
+                }}>
+                    <View style={{
+                        height: 20,
+                        width: 20,
+                        borderRadius: 50,
+                        backgroundColor: value === "red" ? "red" : value === "blue" ? 'blue' : value === "green" ? 'green' : value === "black" ? 'black' : 'white'
+                    }}>
+                    </View>
+                    <Text style={styles.selectedColorLabel}>{value}</Text>
+                </View>
+            )
+
+            }
+            <View style={{display: !showDropDown ? "flex":'none'}}>
+            <SimpleLineIcons name="arrow-down" size={16} color="#6A6A6A" style={{marginTop:3}}/>
+            </View>
+        </TouchableOpacity>
+    );
+}
+
+
+
 
 const styles = StyleSheet.create({
     dropdownContainer: {
         display: 'flex',
+
         // alignItems: 'center',
-        // justifyContent: 'center',
+        justifyContent: 'space-between',
         borderRadius: 0,
-        padding: 5,
+        padding: 15,
         marginTop: 20,
         backgroundColor: "#FFF",
         ...Platform.select({
@@ -56,73 +136,3 @@ const styles = StyleSheet.create({
         marginLeft: 8,
     },
 });
-
-export default function CustomDropDown({ label, value, list, setValue }) {
-    const [showDropDown, setShowDropDown] = useState(false);
-
-    const handleColorSelect = (selectedValue) => {
-        setValue(selectedValue);
-        setShowDropDown(false);
-    };
-
-    const changeCustomColor = (color) => {
-        setValue(color);
-        setShowDropDown(false);
-    };
-
-    const navigation = useNavigation();
-    const handlePress = () => {
-        console.log("🚀 ~ file: customDropdowm.js:62 ~ handlePress ~ ee:")
-
-        if (label === 'Custom') {
-            navigation.push('ColorGrid', { onSelect: handleColorSelect, changeCustomColor });
-        } else {
-            setShowDropDown(!showDropDown);
-        }
-    };
-
-    return (
-        <View style={styles.dropdownContainer}>
-            <TouchableOpacity style={{
-                display:'flex',
-                alignItems:'center'
-            }} onPress={handlePress}>
-                <Text style={{textAlign:"left"}}>{label}</Text>
-            </TouchableOpacity>
-            {showDropDown && (
-                <View >
-                    {list.map((color) => (
-                        <TouchableOpacity
-                            key={color.value}
-                            onPress={() => handleColorSelect(color.value)}
-                            style={styles.colorOption}
-                        >
-                            <View
-                                style={[
-                                    styles.colorBox,
-                                    { backgroundColor: color.value },
-                                ]}
-                            />
-                            <Text>{color.label}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            )}
-            {value !== "" && (
-                <View style={{
-                    flexDirection: "row",
-                    alignItems: 'center',
-                }}>
-                    <View style={{
-                        height: 20,
-                        width: 20,
-                        borderRadius: 50,
-                        backgroundColor: value === "red" ? "red" : value === "blue" ? 'blue' : value === "green" ? 'green' : value === "black" ? 'black' : 'white'
-                    }}>
-                    </View>
-                    <Text style={styles.selectedColorLabel}>{value}</Text>
-                </View>
-            )}
-        </View>
-    );
-}

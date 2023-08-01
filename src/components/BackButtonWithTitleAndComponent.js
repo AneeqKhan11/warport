@@ -6,17 +6,17 @@ import HeaderLogo from './HeaderLogo'
 const styles = StyleSheet.create({
   mainContainer: {
     width: '100%',
-    backgroundColor: 'white',
-    borderBottomColor:"#cccc",
-    borderBottomWidth:1,
-    paddingHorizontal: 20,
+
+    // backgroundColor: 'white',
+    // borderBottomColor:"#cccc",
+    // borderBottomWidth:1,
+    // paddingHorizontal: 20,
   },
   container: {
-    flexDirection: 'row',
-    flex:1,
+    flex: 1,
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 4,
   },
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: 'bold',
     paddingVertical: 12,
+    marginLeft: 40
   },
 })
 
@@ -36,14 +37,16 @@ export default function BackButtonWithTitleAndComponent({
   goBack,
   children,
   title,
+  mainContainer,
+  headerText
 }) {
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { paddingHorizontal: mainContainer }]}>
       <View style={styles.container}>
         <TouchableOpacity onPress={goBack}>
           <Icon name="arrow-left" size={24} color="gray" />
         </TouchableOpacity>
-        <Text style={styles.header}>{title}</Text>
+        <Text style={[styles.header,{marginLeft:headerText}]}>{title}</Text>
         {children}
       </View>
     </View>

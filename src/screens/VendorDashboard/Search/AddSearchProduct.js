@@ -12,13 +12,13 @@ import SpinnerOverlay from '../../../components/SpinnerOverlay';
 import AlertView from '../../../context/AlertView';
 
 const AddSearchProduct = (props) => {
-    const navigation = useNavigation()
-    const [loading, setLoading] = useState(false)
-    const {translation} = useTranslation()
-BackHandler.addEventListener('hardwareBackPress',()=>{
+  const navigation = useNavigation()
+  const [loading, setLoading] = useState(false)
+  const { translation } = useTranslation()
+  BackHandler.addEventListener('hardwareBackPress', () => {
     navigation.goBack()
     return true
-})
+  })
   const [productName, setProductName] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [productCategory, setProductCategory] = useState('');
@@ -27,12 +27,12 @@ BackHandler.addEventListener('hardwareBackPress',()=>{
   const [imagesToSend, setImagesToSend] = useState([])
   const { alertWithType } = useDropdownAlert()
   const [success, setSuccess] = useState(false)
-  const [alertMessage , setAlertMessage] = useState("")
+  const [alertMessage, setAlertMessage] = useState("")
   const [alertVisible, setAlertVisible] = useState(false)
 
-  const handleSubmit = async () =>{
+  const handleSubmit = async () => {
     setLoading(true)
-    try{
+    try {
       const formData = new FormData();
       await formData.append('product_name', productName);
       await formData.append('supplier_name', supplierName);
@@ -44,10 +44,10 @@ BackHandler.addEventListener('hardwareBackPress',()=>{
           uri: image.path,
           type: image.mime,
           name: Date.now() +
-          '_' +`image_${index}.${image.mime.split('/')[1]}`
+            '_' + `image_${index}.${image.mime.split('/')[1]}`
         });
         productFilenames.push(Date.now() +
-        '_' +`image_${index}.${image.mime.split('/')[1]}`)
+          '_' + `image_${index}.${image.mime.split('/')[1]}`)
       });
       await formData.append('media_serialized', productFilenames);
       await axios({
@@ -59,32 +59,32 @@ BackHandler.addEventListener('hardwareBackPress',()=>{
         },
         timeout: 10000,
       })
-        setAlertMessage('Data Saved Successfully')
-        setSuccess(true)
-        setAlertVisible(true)
-        // alertWithType('success', 'WarePort Success', 'Data Saved Successfully')
-        setProductName('')
-        setImages([])
-        setImagesToSend([])
-        setProductCategory('')
-        setProductType('')
-        setSupplierName('')
-        setLoading(false)
-    }catch(error){
-        setAlertMessage('Data Saved Successfully, It will take some time to show')
-        setSuccess(true)
-        setAlertVisible(true)
-        // alertWithType('success', 'WarePort Success', 'Data Saved Successfully, It will take some time to show')
-        setProductName('')
-        setImages([])
-        setImagesToSend([])
-        setProductCategory('')
-        setProductType('')
-        setSupplierName('')
-        setLoading(false)
+      setAlertMessage('Data Saved Successfully')
+      setSuccess(true)
+      setAlertVisible(true)
+      // alertWithType('success', 'WarePort Success', 'Data Saved Successfully')
+      setProductName('')
+      setImages([])
+      setImagesToSend([])
+      setProductCategory('')
+      setProductType('')
+      setSupplierName('')
+      setLoading(false)
+    } catch (error) {
+      setAlertMessage('Data Saved Successfully, It will take some time to show')
+      setSuccess(true)
+      setAlertVisible(true)
+      // alertWithType('success', 'WarePort Success', 'Data Saved Successfully, It will take some time to show')
+      setProductName('')
+      setImages([])
+      setImagesToSend([])
+      setProductCategory('')
+      setProductType('')
+      setSupplierName('')
+      setLoading(false)
     }
   }
-    const pickImage = () => {
+  const pickImage = () => {
     ImagePicker.openPicker({
       multiple: true,
       mediaType: 'any',
@@ -104,33 +104,22 @@ BackHandler.addEventListener('hardwareBackPress',()=>{
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <SpinnerOverlay
-            visible={loading}
-            textContent={translation('Loading...')}
-            textStyle={styles.spinnerTextStyle}
-          />
+        visible={loading}
+        textContent={translation('Loading...')}
+        textStyle={styles.spinnerTextStyle}
+      />
       {
         alertVisible && <AlertView message={alertMessage} visible={setAlertVisible} success={success}></AlertView>
       }
-        <BackButtonWithTitleAndComponent
+      <BackButtonWithTitleAndComponent
         goBack={() => {
           props.navigation.goBack()
         }}
-        // title={translation('Add Search Product')}
+        title={translation('Add Search Product')}
       >
-        <LoadingButton
-            contentStyle={styles.submitButtonContent}
-            textStyle={styles.submitButtonText}
-            loading={false}
-            mode="contained"
-            onPress={()=>{
-              handleSubmit()
-              }}
-            style={styles.submitButton}
-          >
-            {translation('Add')}
-          </LoadingButton>
+
       </BackButtonWithTitleAndComponent>
-      
+
       <Text style={styles.label}>Product Name</Text>
       <TextInput
         style={styles.input}
@@ -174,6 +163,18 @@ BackHandler.addEventListener('hardwareBackPress',()=>{
           />
         </>
       )}
+      <LoadingButton
+        contentStyle={styles.submitButtonContent}
+        textStyle={styles.submitButtonText}
+        loading={false}
+        mode="contained"
+        onPress={() => {
+          handleSubmit()
+        }}
+        style={styles.submitButton}
+      >
+        {translation('Add')}
+      </LoadingButton>
     </ScrollView>
   );
 };
@@ -187,16 +188,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
     padding: 10,
     marginTop: 5,
     marginBottom: 15,
+    backgroundColor: '#FFF',
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   button: {
     backgroundColor: '#2196F3',
     padding: 10,
     borderRadius: 5,
+    marginTop:70
   },
   buttonText: {
     color: 'white',
@@ -208,9 +220,9 @@ const styles = StyleSheet.create({
     height: 200,
   },
   submitButton: {
-    width: 40,
     minWidth: 55,
-    minHeight: 10,
+    minHeight: 40,
+    borderRadius: 5
   },
   submitButtonText: {
     marginHorizontal: 0,

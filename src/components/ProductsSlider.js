@@ -206,7 +206,15 @@ const ProductSlide = ({
         inactiveSlideOpacity={1}
         inactiveSlideScale={1}
       />
-      {/* <View style={styles.thumbnailBottomBar}>
+    </View>
+  );
+};
+
+export default ProductSlide;
+
+
+
+{/* <View style={styles.thumbnailBottomBar}>
           <Pagination
             containerStyle={styles.tabsContainer}
             renderDots={(activeIndex) =>
@@ -244,8 +252,3 @@ const ProductSlide = ({
           />
         </View> */}
       {/* <View ></View> */}
-    </View>
-  );
-};
-
-export default ProductSlide;

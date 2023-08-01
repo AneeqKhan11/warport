@@ -95,14 +95,15 @@ const styles = StyleSheet.create({
     minWidth: 55,
     minHeight: 40,
     alignSelf: 'center',
-    borderRadius: 0
+    borderRadius: 5
   },
   submitButton1: {
     width: 80,
     minWidth: 55,
     minHeight: 10,
     alignSelf: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft:40
   },
   submitButtonText: {
     marginHorizontal: 0,
@@ -161,7 +162,8 @@ const styles = StyleSheet.create({
 
   },
   discountModalButton: {
-    maxWidth: "70%"
+    maxWidth: "70%",
+    borderRadius: 5
   },
   discountDiscription: {
     justifyContent: 'center',
@@ -244,6 +246,7 @@ function AddEditProduct(props) {
     { label: 'Custom', value: 'Custom' },
   ];
   const [selectedColor, setSelectedColor] = useState([]);
+  console.log("🚀 ~ file: AddEditProduct.js:247 ~ AddEditProduct ~ selectedColor:", selectedColor)
   const handleColorChange = (color) => {
     setSelectedColor(color);
   };
@@ -779,6 +782,8 @@ function AddEditProduct(props) {
             ' ' +
             translation('Product')
           }
+          mainContainer={20}
+          headerText={60}
         >
           {props.route &&
             props.route.params &&
@@ -857,7 +862,7 @@ function AddEditProduct(props) {
               />
             </View>
             <CustomDropDown
-              label="Select Color"
+              label={"Select Color :"}
               value={selectedColor}
               list={colorOptions}
               setValue={handleColorChange}
@@ -881,15 +886,12 @@ function AddEditProduct(props) {
               }
             />
             <Text style={{
-              marginBottom: 10,
               fontSize: 14,
               color: 'white',
-              backgroundColor: "blue",
-              borderColor: 'blue',
-              borderWidth: 3,
-              width: '70%',
-              // paddingLeft: 10,
-              // paddingTop: 5
+              backgroundColor: "#000000",
+              width: '55%',
+              padding: 5,
+              marginBottom: 10
             }}>{translation('Product Price Range (PKR)')}</Text>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <TextInput
@@ -1022,7 +1024,7 @@ function AddEditProduct(props) {
                 marginTop: 15,
                 fontSize: 14,
                 color: 'white',
-                backgroundColor: "#402798",
+                backgroundColor: "#000000",
                 width: '30%',
                 padding: 10,
                 textAlign: 'center'
