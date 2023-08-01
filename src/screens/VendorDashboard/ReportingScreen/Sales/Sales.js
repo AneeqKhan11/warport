@@ -29,7 +29,7 @@ import BackButtonWithTitleAndComponent from '../../../../components/BackButtonWi
 const styles = StyleSheet.create({
   scrollViewMain: {
     flex: 2,
-    backgroundColor: 'white'
+    // backgroundColor:"grey"
   },
   DropDown: {
     marginLeft: 5,
@@ -90,26 +90,21 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   fieldsContainer: {
-    flexDirection: 'row',
-    // height:60,
-    backgroundColor: 'white',
-    margin: 2,
-    marginTop: 0,
-    paddingTop: 5,
-    marginBottom: 0,
+    width: '100%',
+    paddingHorizontal: 35,
+    paddingVertical: 20,
+    // paddingBottom: 120
+
   },
   fields: {
     width: "100%",
-    marginLeft: 10,
-    marginBottom: 5
+    marginVertical: 5
   },
   addLinebtn: {
-    marginTop: 2,
+    marginTop: 15,
     height: 40,
-    marginLeft: 15,
-    minWidth: 10,
-    width: 40,
     backgroundColor: 'blue',
+    borderRadius: 5
   },
   btnText: {
     fontSize: 8,
@@ -128,10 +123,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 10,
-    height: 41,
-    width: 60,
+    height: 40,
+    width: "100%",
     textAlign: "left",
-    marginTop: -5
   },
   priceStyle: {
     marginLeft: 2
@@ -232,6 +226,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingVertical: 5,
+    // backgroundColor:'red'
   },
 })
 
@@ -703,7 +698,7 @@ function Sales(props) {
       {
         alertVisible && <AlertView title={"WarePort Alert"} message={alertMessage} visible={setAlertVisible} exit={exit}></AlertView>
       }
-      <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', marginVertical: "1%" }}>
+      <View style={{ flex: 1, alignItems: 'center', marginVertical: "1%" }}>
         <BackButtonWithTitleAndComponent
           goBack={() => {
             props.navigation.goBack()
@@ -716,7 +711,7 @@ function Sales(props) {
         </BackButtonWithTitleAndComponent>
         {/* <Text style={{fontSize:30,marginLeft:-10, borderColor:'blue', borderRadius:5, backgroundColor:'blue', color:'white', paddingHorizontal:10, marginVertical:5}}>{translation("Sales Box")}</Text> */}
       </View>
-      <View style={{ backgroundColor: Colors.white }}>
+      <View >
         <ScrollView
           // horizontal={true}
           styles={styles.topTotalCountBoxesContainer}
@@ -796,10 +791,9 @@ function Sales(props) {
         </ScrollView>
       </View>
       <ScrollView
-        horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {/* <DataTable style={{ minWidth: 500 }}>
+        {/* <DataTable >
           <DataTable.Header style={styles.headerStyle}>
             <DataTable.Title style={[styles.headerTitle]}>
               <TouchableOpacity onPress={() => {
@@ -842,21 +836,29 @@ function Sales(props) {
                 closeOnSubmit={true}
                 showChevron={false}
                 showClear={false}
-                suggestionsListTextStyle={{ fontSize: 10 }}
+                suggestionsListTextStyle={{ fontSize: 15 }}
                 onSelectItem={item => {
                   item && setSelectedProduct(item)
                 }}
                 dataSet={productList}
                 textInputProps={{
-                  placeholder: '',
+                  placeholder: 'Add name of Product',
                   autoCorrect: false,
                   autoCapitalize: 'none',
                   style: {
-                    // marginTop: 100,
-                    fontSize: 10,
+                    fontSize: 15,
                     backgroundColor: Colors.white,
-                    borderColor: 'grey',
-                    borderWidth: 1
+                    ...Platform.select({
+                      ios: {
+                        shadowColor: 'black',
+                        shadowOffset: { width: 0, height: 20 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 4,
+                      },
+                      android: {
+                        elevation: 4,
+                      },
+                    }),
                   },
                 }}
               />
@@ -874,6 +876,14 @@ function Sales(props) {
               + Add new
             </Button> */}
           </View>
+          <View style={[styles.fields]}>
+            <TextInput style={[styles.textStyle, { color: 'black', fontSize: 15, backgroundColor: "#FFF", borderBottom: 0, borderRadius: 0 }]}
+              value={price}
+              placeholder={"Rs."}
+              onChangeText={newText => { setPrice(newText) }}
+              keyboardType='numeric'
+            />
+          </View>
           <View style={styles.fields}>
             <AutocompleteDropdown
               ref={dropdownRef2}
@@ -882,22 +892,31 @@ function Sales(props) {
               closeOnSubmit={true}
               showChevron={false}
               showClear={false}
-              suggestionsListTextStyle={{ fontSize: 10 }}
+              suggestionsListTextStyle={{ fontSize: 15 }}
               initialValue={selectedQuantity} // or just '2'
               onSelectItem={item => {
                 item && setSelectedQuantity(item)
               }}
               dataSet={quantityList}
               textInputProps={{
-                placeholder: '',
+                placeholder: 'Selected Quantity',
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 keyboardType: "number-pad",
                 style: {
-                  fontSize: 10,
+                  fontSize: 15,
                   backgroundColor: Colors.white,
-                  borderColor: 'grey',
-                  borderWidth: 1
+                  ...Platform.select({
+                    ios: {
+                      shadowColor: 'black',
+                      shadowOffset: { width: 0, height: 20 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 4,
+                    },
+                    android: {
+                      elevation: 4,
+                    },
+                  }),
                 },
               }}
             />
@@ -920,21 +939,30 @@ function Sales(props) {
               closeOnSubmit={true}
               showChevron={false}
               showClear={false}
-              suggestionsListTextStyle={{ fontSize: 10 }}
-              initialValue={selectedUOM} // or just '2'
+              suggestionsListTextStyle={{ fontSize: 10, }}
+              initialValue={selectedUOM}
               onSelectItem={item => {
                 item && setSelectedUOM(item)
               }}
               dataSet={uomList}
               textInputProps={{
-                placeholder: '',
+                placeholder: 'UOM',
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {
-                  fontSize: 10,
-                  backgroundColor: Colors.white,
-                  borderColor: 'grey',
-                  borderWidth: 1
+                  fontSize: 15,
+                  backgroundColor: "white",
+                  ...Platform.select({
+                    ios: {
+                      shadowColor: 'black',
+                      shadowOffset: { width: 0, height: 20 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 4,
+                    },
+                    android: {
+                      elevation: 4,
+                    },
+                  }),
                 },
               }}
             />
@@ -948,33 +976,35 @@ function Sales(props) {
               closeOnSubmit={true}
               showChevron={false}
               showClear={false}
-              suggestionsListTextStyle={{ fontSize: 10 }}
-              initialValue={selectedCustomer} // or just '2'
+              suggestionsListTextStyle={{ fontSize: 15 }}
+              initialValue={selectedCustomer}
               onSelectItem={item => {
                 item && setSelectedCustomer(item)
               }}
               dataSet={customerList}
               textInputProps={{
-                placeholder: '',
+                placeholder: 'Select Customer',
                 autoCorrect: false,
                 autoCapitalize: 'none',
                 style: {
-                  fontSize: 10,
-                  backgroundColor: Colors.white,
-                  borderColor: 'grey',
-                  borderWidth: 1
+                  fontSize: 15,
+                  backgroundColor: '#FFF',
+                  ...Platform.select({
+                    ios: {
+                      shadowColor: 'black',
+                      shadowOffset: { width: 0, height: 20 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 4,
+                    },
+                    android: {
+                      elevation: 4,
+                    },
+                  }),
                 },
               }}
             />
           </View>
-          <View style={[styles.fields]}>
-            <TextInput mode='outlined' style={[styles.textStyle, { color: 'black' }]}
-              value={price}
-              placeholder={"Rs."}
-              onChangeText={newText => { setPrice(newText) }}
-              keyboardType='numeric'
-            ></TextInput>
-          </View>
+
           <TouchableOpacity
             style={[styles.addLinebtn, { justifyContent: 'center', alignItems: 'center' }]}
             onPress={handleAdd}>
