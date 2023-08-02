@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   addLinebtn: {
     marginTop: 15,
     height: 40,
-    backgroundColor: 'blue',
+    backgroundColor: '#402798',
     borderRadius: 5
   },
   btnText: {
@@ -711,6 +711,7 @@ function Sales(props) {
         </BackButtonWithTitleAndComponent>
         {/* <Text style={{fontSize:30,marginLeft:-10, borderColor:'blue', borderRadius:5, backgroundColor:'blue', color:'white', paddingHorizontal:10, marginVertical:5}}>{translation("Sales Box")}</Text> */}
       </View>
+      <Divider ></Divider>
       <View >
         <ScrollView
           // horizontal={true}
@@ -722,74 +723,64 @@ function Sales(props) {
             paddingLeft: 24,
           }}>
 
-            <View >
+            <TouchableOpacity onPress={() => {
+              createPdf(dailySaleArray)
+            }}>
               <Text style={styles.topTotalCountDescription}>
                 {translation('Daily Sales')}
               </Text>
               <View style={styles.topTotalCountBoxes}>
-                <TouchableOpacity
-                  onPress={() => {
-                    createPdf(dailySaleArray)
-                  }}
-                >
-                  <Text style={styles.topTotalCount}>{"PKR " + (dailySale ? dailySale : 0)}</Text>
-
-                </TouchableOpacity>
+                <Text style={styles.topTotalCount}>{"PKR " + (dailySale ? dailySale : 0)}</Text>
               </View>
-            </View>
-            <View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                createPdf(weeklySaleArray)
+              }}
+            >
               <Text style={styles.topTotalCountDescription}>
                 {translation('Weekly Sales')}
               </Text>
               <View style={styles.topTotalCountBoxes}>
-                <TouchableOpacity
-                  onPress={() => {
-                    createPdf(weeklySaleArray)
-                  }}
-                >
-                  <Text style={styles.topTotalCount}>{"PKR " + (weeklySale ? weeklySale : 0)}</Text>
 
-                </TouchableOpacity>
+                <Text style={styles.topTotalCount}>{"PKR " + (weeklySale ? weeklySale : 0)}</Text>
+
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={{
             flexDirection: "row",
             paddingLeft: 24,
           }}>
-            <View >
+            <TouchableOpacity
+              onPress={() => {
+                createPdf(monthlySaleArray)
+              }}
+            >
               <Text style={styles.topTotalCountDescription}>
                 {translation('Monthly Sales')}
               </Text>
               <View style={styles.topTotalCountBoxes}>
-                <TouchableOpacity
-                  onPress={() => {
-                    createPdf(monthlySaleArray)
-                  }}
-                >
-                  <Text style={styles.topTotalCount}>{"PKR " + (monthlySale ? monthlySale : 0)}</Text>
+                <Text style={styles.topTotalCount}>{"PKR " + (monthlySale ? monthlySale : 0)}</Text>
 
-                </TouchableOpacity>
               </View>
-            </View>
-            <View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                createPdf(yearlySaleArray)
+              }}
+            >
               <Text style={styles.topTotalCountDescription}>
                 {translation('Yearly Sales')}
               </Text>
               <View style={styles.topTotalCountBoxes}>
-                <TouchableOpacity
-                  onPress={() => {
-                    createPdf(yearlySaleArray)
-                  }}
-                >
-                  <Text style={styles.topTotalCount}>{"PKR " + (!yearlySale ? yearlySale : 0)}</Text>
+                <Text style={styles.topTotalCount}>{"PKR " + (yearlySale ? yearlySale : 0)}</Text>
 
-                </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      </View >
       <ScrollView
         showsHorizontalScrollIndicator={false}
       >
@@ -822,7 +813,7 @@ function Sales(props) {
             </DataTable.Title>
           </DataTable.Header>
         </DataTable> */}
-        <View style={styles.fieldsContainer}>
+        {/* <View style={styles.fieldsContainer}>
           <View style={styles.fields}>
             <TouchableOpacity
               activeOpacity={1}
@@ -863,18 +854,6 @@ function Sales(props) {
                 }}
               />
             </TouchableOpacity>
-            {/* <Button
-              labelStyle={styles.btnText}
-              contentStyle={styles.addProductbtnContent}
-              mode='contained'
-              style={styles.addProductbtn}
-              onPress={() => {
-                navigation.navigate('AddEditProduct', {
-                  addInCustomerQueryFormProductDetailsAdded: true,
-                })
-              }}>
-              + Add new
-            </Button> */}
           </View>
           <View style={[styles.fields]}>
             <TextInput style={[styles.textStyle, { color: 'black', fontSize: 15, backgroundColor: "#FFF", borderBottom: 0, borderRadius: 0 }]}
@@ -920,18 +899,9 @@ function Sales(props) {
                 },
               }}
             />
-            {/* <TouchableOpacity onPress={handleDecrement} style={styles.quantityButton}>
-        <Text style={styles.quantityButtonText}>-</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.quantityText}>{selectedQuantity}</Text>
-
-      <TouchableOpacity onPress={handleIncrement} style={styles.quantityButton}>
-        <Text style={styles.quantityButtonText}>+</Text>
-      </TouchableOpacity> */}
+            
           </View>
           <View style={styles.fields}>
-            {/* <Text style={styles.labelStyle}>Customer</Text> */}
             <AutocompleteDropdown
               ref={dropdownRef3}
               clearOnFocus={false}
@@ -968,7 +938,6 @@ function Sales(props) {
             />
           </View>
           <View style={styles.fields}>
-            {/* <Text style={styles.labelStyle}>Customer</Text> */}
             <AutocompleteDropdown
               ref={dropdownRef4}
               clearOnFocus={false}
@@ -1004,18 +973,22 @@ function Sales(props) {
               }}
             />
           </View>
-
           <TouchableOpacity
             style={[styles.addLinebtn, { justifyContent: 'center', alignItems: 'center' }]}
             onPress={handleAdd}>
             <Text style={{ fontSize: 14, color: 'white' }}>{translation("Save")}</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
+      <TouchableOpacity
+        style={[styles.addLinebtn, { justifyContent: 'center', alignItems: 'center', marginHorizontal: 10 }]}
+        onPress={handleAdd}>
+        <Text style={{ fontSize: 17, color: 'white' }}>{translation("Some Text about add")}</Text>
+      </TouchableOpacity>
       <Divider ></Divider>
-      <Divider style={{ zIndex: -1 }}></Divider>
+      <Divider style={{ zIndex: -1, marginTop: 20 }}></Divider>
       <SalesTable Data={salesData} refresh={refresh} refreshTable={refreshTable} />
-    </ScrollView>
+    </ScrollView >
   );
 }
 const mapStateToProps = (state) => {

@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   tableHeaderText: {
     color: Colors.white,
     fontSize: 10,
-    paddingRight: 5
+    paddingRight: 50
   },
   textStyle: {
     fontSize: 10,
@@ -78,29 +78,33 @@ const styles = StyleSheet.create({
     marginLeft: 2
   },
   tableRowStyle: {
-    backgroundColor: 'white',
+    // backgroundColor: 'red',
     zIndex: -1,
     width: '98%',
   },
   cellStyle: {
+    width: 60,
     borderRightColor: Colors.white,
     borderRightWidth: 1,
     borderBottomColor: Colors.white,
     borderBottomWidth: 1,
     flex: 2,
-    justifyContent: 'center'
   },
   firstCell: {
-    borderRightColor: Colors.white,
-    borderRightWidth: 1,
-    borderBottomColor: Colors.white,
-    borderBottomWidth: 1,
+    width: 60,
+
+    // backgroundColor: 'yellow'
+    // borderRightColor: Colors.white,
+    // borderRightWidth: 1,
+    // borderBottomColor: Colors.white,
+    // borderBottomWidth: 1,
     // marginLeft: -15,
     // justifyContent: 'center'
   },
   lastCell: {
     borderBottomColor: Colors.white,
-    // borderBottomWidth: 1,
+    borderBottomWidth: 1,
+    width: 50
     // justifyContent: 'center',
   }
 })
@@ -222,88 +226,128 @@ function SalesTable(props) {
       }
       <View style={{
         maxWidth: 370,
-        paddingHorizontal:10
+        paddingHorizontal: 10
       }}>
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         >
           <DataTable style={{ minWidth: 700 }}>
-            <DataTable.Header style={styles.headerStyle}>
-              <DataTable.Title style={[styles.headerTitle, styles.firstCell]} textStyle={styles.tableHeaderText}
-                onPress={() => handleSort(0)}
-              > S.no
-              </DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.cellStyle]} textStyle={styles.tableHeaderText}
-                onPress={() => handleSort(0)}
-              > Date
-              </DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.cellStyle]} textStyle={styles.tableHeaderText}
-                onPress={() => handleSort(1)}
-              > <Text style={styles.headerText}>Product</Text>
-              </DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.cellStyle, { flex: 1.6 }]} textStyle={styles.tableHeaderText}
-                numberOfLines={2}
-                onPress={() => handleSort(2)}
-              ><Text style={styles.headerText}>Qty</Text></DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.cellStyle, { flex: 1.6 }]} textStyle={styles.tableHeaderText}
-                numberOfLines={2}
-                onPress={() => handleSort(2)}
-              ><Text style={styles.headerText}>UOM</Text></DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.cellStyle]} textStyle={styles.tableHeaderText}
-                numberOfLines={2}
-                // sortDirection={
-                //     sort.index === 3 ? sort.direction : 'ascending'
-                //   }
-                onPress={() => handleSort(3)}
-              ><Text style={styles.headerText}>Customer</Text></DataTable.Title>
-              <DataTable.Title style={[styles.headerTitle, styles.lastCell]} textStyle={styles.tableHeaderText}
-                onPress={() => handleSort(4)}
-              ><Text style={styles.headerText}>Price</Text>
-              </DataTable.Title>
+            <DataTable.Header style={{
+              height: 50,
+              backgroundColor: '#25354f'
+            }}>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(0)} ><Text style={styles.headerText}> S.no</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(0)} ><Text style={styles.headerText}>Date</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(1)} ><Text style={styles.headerText}>Product</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(2)} numberOfLines={2}><Text style={styles.headerText}>Qty</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(2)} numberOfLines={2}><Text style={styles.headerText}>UOM</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(3)} numberOfLines={2}><Text style={styles.headerText}>Customer</Text></DataTable.Title>
+              <DataTable.Title
+                style={{
+                  width: 50
+                }}
+                onPress={() => handleSort(4)}><Text style={styles.headerText}>Price</Text></DataTable.Title>
             </DataTable.Header>
             {data != null ? data.map((item, index) => (
-              <DataTable.Row key={index} style={styles.tableRowStyle}>
-                <DataTable.Cell style={[styles.firstCell]}>{index + 1}</DataTable.Cell>
-                <DataTable.Cell style={styles.cellStyle}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 12 }}>{new Date(parseInt(item.createdAt)).toLocaleDateString()}</Text>
-                    <Icon name="calendar" type="font-awesome" size={6} color="gray" />
-                  </View>
-                </DataTable.Cell>
-                <DataTable.Cell style={styles.cellStyle}>{item.product_name}</DataTable.Cell>
-                <DataTable.Cell style={[styles.cellStyle, { flex: 1.6 }]}>{item.sales_quantity}</DataTable.Cell>
-                <DataTable.Cell style={styles.cellStyle}>{item.uom}</DataTable.Cell>
-                <DataTable.Cell style={styles.cellStyle}>{item.customer_name}</DataTable.Cell>
-                <DataTable.Cell style={[styles.lastCell]}>{item.sales_price}</DataTable.Cell>
+              <DataTable.Row style={{
+                height: 60,
+                backgroundColor: '#FFF'
+              }}>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{index + 1}</DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}><View ><Text style={{ fontSize: 12 }}>{new Date(parseInt(item.createdAt)).toLocaleDateString()}</Text></View></DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{item.product_name}</DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{item.sales_quantity}</DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{item.uom}</DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{item.customer_name}</DataTable.Cell>
+                <DataTable.Cell style={{
+                  width: 100,
+                }}>{item.sales_price}</DataTable.Cell>
               </DataTable.Row>
             )) :
               <DataTable.Row key={1} style={styles.tableRowStyle}>
                 <DataTable.Cell borderless={true}>No Data Added</DataTable.Cell>
               </DataTable.Row>
             }
-            <DataTable.Row style={[styles.tableRowStyle]}>
-              <DataTable.Cell style={[styles.firstCell]}>Total</DataTable.Cell>
-              <DataTable.Cell style={styles.cellStyle}></DataTable.Cell>
-              <DataTable.Cell style={[styles.cellStyle, { flex: 1.6 }]}>{totalSalesQuantity}</DataTable.Cell>
-              <DataTable.Cell style={styles.cellStyle}></DataTable.Cell>
-              <DataTable.Cell style={[styles.lastCell]}>{totalSalesPrice}</DataTable.Cell>
+            <DataTable.Row style={{
+              height: 60,
+              backgroundColor: '#FFF'
+            }}>
+              <DataTable.Cell style={{
+                width: 100,
+              }}>Total</DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+              }}></DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+              }}></DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+              }}>{totalSalesQuantity}</DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+              }}></DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+              }}></DataTable.Cell>
+              <DataTable.Cell style={{
+                width: 100,
+                marginLeft:20
+              }}>{totalSalesPrice}</DataTable.Cell>
+
             </DataTable.Row>
 
-           <View style={{paddingRight:20}}>
-           <DataTable.Pagination
-              style={{ zIndex: -1,backgroundColor:'#FFF' }}
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1 of 2"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPaginationControls={true}
-              optionsLabel={'Rows per page'}
-            />
-           </View>
+            <View>
+              <DataTable.Pagination
+                style={{ zIndex: -1, backgroundColor: '#FFF' }}
+                page={page}
+                numberOfPages={3}
+                onPageChange={(page) => setPage(page)}
+                label="1 of 2"
+                optionsPerPage={optionsPerPage}
+                itemsPerPage={itemsPerPage}
+                setItemsPerPage={setItemsPerPage}
+                showFastPaginationControls={true}
+                optionsLabel={'Rows per page'}
+              />
+            </View>
           </DataTable>
         </ScrollView>
       </View>
