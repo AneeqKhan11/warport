@@ -269,7 +269,7 @@ function SalesTable(props) {
                 onPress={() => handleSort(3)} numberOfLines={2}><Text style={styles.headerText}>Customer</Text></DataTable.Title>
               <DataTable.Title
                 style={{
-                  width: 50
+                  width: 50,paddingLeft:20
                 }}
                 onPress={() => handleSort(4)}><Text style={styles.headerText}>Price</Text></DataTable.Title>
             </DataTable.Header>
@@ -298,6 +298,7 @@ function SalesTable(props) {
                 }}>{item.customer_name}</DataTable.Cell>
                 <DataTable.Cell style={{
                   width: 100,
+                  paddingLeft:20
                 }}>{item.sales_price}</DataTable.Cell>
               </DataTable.Row>
             )) :
@@ -329,7 +330,7 @@ function SalesTable(props) {
               }}></DataTable.Cell>
               <DataTable.Cell style={{
                 width: 100,
-                marginLeft:20
+                paddingLeft:20
               }}>{totalSalesPrice}</DataTable.Cell>
 
             </DataTable.Row>
