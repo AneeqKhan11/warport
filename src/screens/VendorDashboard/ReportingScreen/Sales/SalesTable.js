@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Text, StyleSheet, View, BackHandler } from 'react-native';
+import { Text, StyleSheet, View, BackHandler, TouchableOpacity } from 'react-native';
 import { DataTable, Searchbar } from 'react-native-paper';
 import { Colors } from 'react-native-paper';
 import { getLoginUserId } from '../../../../auth/LocalStorage';
@@ -7,7 +7,7 @@ import SpinnerOverlay from '../../../../components/SpinnerOverlay'
 import { useTranslation } from '../../../../context/Localization';
 import { SalesDataContext } from '../../../../context/SalesDataContextProvider';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
@@ -251,7 +251,18 @@ function SalesTable(props) {
                 style={{
                   width: 50
                 }}
-                onPress={() => handleSort(1)} ><Text style={styles.headerText}>Product</Text></DataTable.Title>
+                onPress={() => handleSort(1)} >
+                <Text style={styles.headerText}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.navigate('AddEditProduct', {
+                      addInCustomerQueryFormProductDetailsAdded: true,
+                    })
+                  }} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Icon name={'email-variant'} size={13} color={'white'}></Icon>
+                    <Text style={styles.headerText}>{translation("Product +")} </Text>
+                  </TouchableOpacity>
+                </Text>
+              </DataTable.Title>
               <DataTable.Title
                 style={{
                   width: 50
@@ -266,10 +277,19 @@ function SalesTable(props) {
                 style={{
                   width: 50
                 }}
-                onPress={() => handleSort(3)} numberOfLines={2}><Text style={styles.headerText}>Customer</Text></DataTable.Title>
+                onPress={() => handleSort(3)} numberOfLines={2}>
+                <Text style={styles.headerText}>
+                  <TouchableOpacity onPress={() => {
+                    navigation.push('newCustomerForm')
+                  }} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <Icon name={'email-variant'} size={13} color={'white'} />
+                    <Text style={styles.headerText}> {translation("Customer +")} </Text>
+                  </TouchableOpacity>
+                </Text>
+              </DataTable.Title>
               <DataTable.Title
                 style={{
-                  width: 50,paddingLeft:20
+                  width: 50, paddingLeft: 20
                 }}
                 onPress={() => handleSort(4)}><Text style={styles.headerText}>Price</Text></DataTable.Title>
             </DataTable.Header>
@@ -298,7 +318,7 @@ function SalesTable(props) {
                 }}>{item.customer_name}</DataTable.Cell>
                 <DataTable.Cell style={{
                   width: 100,
-                  paddingLeft:20
+                  paddingLeft: 20
                 }}>{item.sales_price}</DataTable.Cell>
               </DataTable.Row>
             )) :
@@ -330,7 +350,7 @@ function SalesTable(props) {
               }}></DataTable.Cell>
               <DataTable.Cell style={{
                 width: 100,
-                paddingLeft:20
+                paddingLeft: 20
               }}>{totalSalesPrice}</DataTable.Cell>
 
             </DataTable.Row>

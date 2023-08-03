@@ -57,7 +57,7 @@ import Buyers from './src/screens/VendorDashboard/ReportingScreen/Buyers'
 import ChatScreen from './src/screens/VendorDashboard/Chat/ChatScreen'
 import ChattingScreen from './src/screens/VendorDashboard/Chat/ChattingScreen'
 import ProductCategoryPopUp from './src/screens/VendorDashboard/ProductAddEditDelete/ProductCategoryPopUp'
-import Sales from './src/screens/VendorDashboard/ReportingScreen/Sales/Sales'
+import Sales, { AddNewRecord } from './src/screens/VendorDashboard/ReportingScreen/Sales/Sales'
 import newCustomerForm from './src/screens/CustomerQueryForm/newCustomerForm'
 import SalesData from './src/screens/VendorDashboard/ReportingScreen/Sales/SalesData'
 import ProductsViewComponent from './src/screens/VendorDashboard/ProductAddEditDelete/ProductsViewComponent'
@@ -77,9 +77,9 @@ import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 
 
-const errorLink = onError(({graphqlErrors, networkError}) => {
+const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
-    graphqlErrors.map(({message, location, path})=> {
+    graphqlErrors.map(({ message, location, path }) => {
       alert(`Graphql error ${message}`);
     });
   }
@@ -120,12 +120,12 @@ const wsLink = new WebSocketLink({
     timeout: 600000,
     minTimeout: 600000,
     reconnect: true,
-    lazy:true
+    lazy: true
   },
 })
 const splitLink = split(
   ({ query }) => {
-   
+
     const definition = getMainDefinition(query);
     return (
       definition.kind === "OperationDefinition" &&
@@ -159,7 +159,7 @@ wsLink.subscriptionClient.on('onError', (error) => {
 })
 
 wsLink.subscriptionClient.maxConnectTimeGenerator.duration = () =>
-wsLink.subscriptionClient.maxConnectTimeGenerator.max
+  wsLink.subscriptionClient.maxConnectTimeGenerator.max
 
 const apolloClient = new ApolloClient({
   link: splitLink,
@@ -181,7 +181,7 @@ export default function App() {
         'Notification caused app to open from background state:',
         remoteMessage.notification,
       );
-      navigation.navigate("ReplyForRfq",{data:remoteMessage});
+      navigation.navigate("ReplyForRfq", { data: remoteMessage });
     });
 
     // Check whether an initial notification is available
@@ -194,8 +194,8 @@ export default function App() {
             remoteMessage.notification,
           );
           // setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-          }
-        })
+        }
+      })
   }, []);
 
   useEffect(() => {
@@ -208,17 +208,17 @@ export default function App() {
         console.log('Authorization status:', authStatus);
       }
     };
-  
+
     requestUserPermission();
 
-    
+
   }, []);
 
   useEffect(() => {
     const getFcmToken = async () => {
       await messaging().registerDeviceForRemoteMessages();
       const token = await messaging().getToken();
-      saveData("TOKEN",token)
+      saveData("TOKEN", token)
       console.log('FCM Token:', token);
     };
     getFcmToken();
@@ -228,7 +228,7 @@ export default function App() {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       console.log('A new FCM message arrived!', remoteMessage);
     });
-  
+
     return unsubscribe;
   }, []);
 
@@ -240,7 +240,7 @@ export default function App() {
     //   if (userId !== null) {
     //     setInitialRoute("VendorScreen");
     //   }
-      
+
     // } catch (error) {
     //   console.log(error);
     // }
@@ -258,189 +258,193 @@ export default function App() {
           <KeyboardStatusContextProvider>
             <AlertDropdownContextProvider>
               <CopilotProvider overlay="svg">
-              <ApolloProvider client={apolloClient}>
-                <ReduxProvider store={store}>
-                  <LoginDataContextProvider>
-                  <ProductsRefreshContextProvider>
-                    <SalesDataContextProvider>
-                    <CustomerQueryFormContextProvider>
-                      <ImagesDataContextProvider>
-                      <Provider theme={theme}>
-                        <NavigationContainer>
-                          <Stack.Navigator
-                            initialRouteName= {initialRoute} 
-                            screenOptions={{
-                              headerShown: false,
-                            }}
-                          >                            
-                            <Stack.Screen
-                              name="SelectRegionScreen"
-                              component={SelectRegionScreen}
-                            />
-                            <Stack.Screen
-                              name="BottomSheetScreen"
-                              component={BottomSheetScreen}
-                            />
-                            <Stack.Screen
-                              name="StartScreen"
-                              component={StartScreen}
-                            />
-                            <Stack.Screen
-                              name="LoginScreen"
-                              component={LoginScreen}
-                            />
-                            <Stack.Screen
-                              name="RegisterScreen"
-                              component={RegisterScreen}
-                            />
-                            <Stack.Screen
-                              name="ManageStock"
-                              component={ManageStock}
-                            />
-                            <Stack.Screen
-                              name="RegisterScreenFinal"
-                              component={RegisterScreenFinal}
-                            />
-                            <Stack.Screen
-                              name="NotificationScreen"
-                              component={NotificationScreen}
-                            />
-                            <Stack.Screen
-                              name="VendorScreen"
-                              component={VendorScreen}
-                            />
-                            <Stack.Screen
-                              name="ProductsViewComponent"
-                              component={ProductsViewComponent}
-                            />
-                            <Stack.Screen
-                              name="ChatScreen"
-                              component={ChatScreen}
-                            />
-                            <Stack.Screen
-                              name="ChattingScreen"
-                              component={ChattingScreen}
-                            />
-                            <Stack.Screen
-                              name="Home"
-                              component={ReportingScreen}
-                            />
-                            <Stack.Screen
-                              name="Post"
-                              component={Post}
-                            />
-                            <Stack.Screen
-                              name="Buyer"
-                              component={Buyers}
-                            />
-                            <Stack.Screen
-                              name="PoLifeCycleScreen"
-                              component={PoLifeCycleScreen}
-                            />
-                            <Stack.Screen
-                              name="PoDetailsScreen"
-                              component={PoDetailsScreen}
-                            />
-                            <Stack.Screen
-                              name="PoLinesScreen"
-                              component={PoLinesScreen}
-                            />
-                            <Stack.Screen
-                              name="CreateBookingScreen"
-                              component={CreateBookingScreen}
-                            />
-                            <Stack.Screen
-                              name="ContactUsScreen"
-                              component={ContactUsScreen}
-                            />
-                            <Stack.Screen
-                              name="ResetPasswordScreen"
-                              component={ResetPasswordScreen}
-                            />
-                            <Stack.Screen
-                              name="MobileConfirmationScreen"
-                              component={MobileConfirmationScreen}
-                            />
-                            <Stack.Screen
-                              name="ChangePasswordScreen"
-                              component={ChangePasswordScreen}
-                            />
-                            <Stack.Screen
-                              name="AddEditProduct"
-                              component={AddEditProduct}
-                            />
-                            <Stack.Screen
-                              name="AddSearchProduct"
-                              component={AddSearchProduct}
-                            />
-                            <Stack.Screen
-                              name="ColorGrid"
-                              component={ColorGrid}
-                            />
-                            <Stack.Screen
-                              name="UserProfileScreen"
-                              component={UserProfileScreen}
-                            />
-                            <Stack.Screen
-                              name="CustomerQueryForm"
-                              component={CustomerQueryForm}
-                            />
-                            <Stack.Screen
-                              name="ReplyForRfq"
-                              component={ReplyForRfq}
-                            />
-                            <Stack.Screen
-                              name="newCustomerForm"
-                              component={newCustomerForm}
-                            />
-                            <Stack.Screen
-                              name="infoForQuotation"
-                              component={infoForQuotation}
-                            />
-                            <Stack.Screen
-                              name="Sales"
-                              component={Sales}
-                            />
-                            <Stack.Screen
-                              name="ImageScreen"
-                              component={ImageScreen}
-                            />
-                            <Stack.Screen
-                              name="ProductGraphs"
-                              component={ProductGraphs}
-                            />
-                            <Stack.Screen
-                              name="VideoStoryScreen"
-                              component={VideoStoryScreen}
-                            />
-                            
-                            <Stack.Screen
-                              name="SalesData"
-                              component={SalesData}
-                            />
-                            <Stack.Screen
-                              name="EmailConfirmationScreen"
-                              component={EmailConfirmationScreen}
-                            />
-                            <Stack.Screen
-                              name="InfoForProductsForm"
-                              component={InfoForProductsForm}
-                            />
-                            <Stack.Screen
-                              name="InternalStandardsForm"
-                              component={InternalStandardsForm}
-                            />
-                          </Stack.Navigator>
-                        </NavigationContainer>
-                      </Provider>
-                      </ImagesDataContextProvider>
-                    </CustomerQueryFormContextProvider>
-                    </SalesDataContextProvider>
-                  </ProductsRefreshContextProvider>
-                  </LoginDataContextProvider>
-                </ReduxProvider>
+                <ApolloProvider client={apolloClient}>
+                  <ReduxProvider store={store}>
+                    <LoginDataContextProvider>
+                      <ProductsRefreshContextProvider>
+                        <SalesDataContextProvider>
+                          <CustomerQueryFormContextProvider>
+                            <ImagesDataContextProvider>
+                              <Provider theme={theme}>
+                                <NavigationContainer>
+                                  <Stack.Navigator
+                                    initialRouteName={initialRoute}
+                                    screenOptions={{
+                                      headerShown: false,
+                                    }}
+                                  >
+                                    <Stack.Screen
+                                      name="SelectRegionScreen"
+                                      component={SelectRegionScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="BottomSheetScreen"
+                                      component={BottomSheetScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="StartScreen"
+                                      component={StartScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="LoginScreen"
+                                      component={LoginScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="RegisterScreen"
+                                      component={RegisterScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ManageStock"
+                                      component={ManageStock}
+                                    />
+                                    <Stack.Screen
+                                      name="RegisterScreenFinal"
+                                      component={RegisterScreenFinal}
+                                    />
+                                    <Stack.Screen
+                                      name="NotificationScreen"
+                                      component={NotificationScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="VendorScreen"
+                                      component={VendorScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ProductsViewComponent"
+                                      component={ProductsViewComponent}
+                                    />
+                                    <Stack.Screen
+                                      name="ChatScreen"
+                                      component={ChatScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ChattingScreen"
+                                      component={ChattingScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="Home"
+                                      component={ReportingScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="AddNewRecord"
+                                      component={AddNewRecord}
+                                    />
+                                    <Stack.Screen
+                                      name="Post"
+                                      component={Post}
+                                    />
+                                    <Stack.Screen
+                                      name="Buyer"
+                                      component={Buyers}
+                                    />
+                                    <Stack.Screen
+                                      name="PoLifeCycleScreen"
+                                      component={PoLifeCycleScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="PoDetailsScreen"
+                                      component={PoDetailsScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="PoLinesScreen"
+                                      component={PoLinesScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="CreateBookingScreen"
+                                      component={CreateBookingScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ContactUsScreen"
+                                      component={ContactUsScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ResetPasswordScreen"
+                                      component={ResetPasswordScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="MobileConfirmationScreen"
+                                      component={MobileConfirmationScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ChangePasswordScreen"
+                                      component={ChangePasswordScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="AddEditProduct"
+                                      component={AddEditProduct}
+                                    />
+                                    <Stack.Screen
+                                      name="AddSearchProduct"
+                                      component={AddSearchProduct}
+                                    />
+                                    <Stack.Screen
+                                      name="ColorGrid"
+                                      component={ColorGrid}
+                                    />
+                                    <Stack.Screen
+                                      name="UserProfileScreen"
+                                      component={UserProfileScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="CustomerQueryForm"
+                                      component={CustomerQueryForm}
+                                    />
+                                    <Stack.Screen
+                                      name="ReplyForRfq"
+                                      component={ReplyForRfq}
+                                    />
+                                    <Stack.Screen
+                                      name="newCustomerForm"
+                                      component={newCustomerForm}
+                                    />
+                                    <Stack.Screen
+                                      name="infoForQuotation"
+                                      component={infoForQuotation}
+                                    />
+                                    <Stack.Screen
+                                      name="Sales"
+                                      component={Sales}
+                                    />
+                                    <Stack.Screen
+                                      name="ImageScreen"
+                                      component={ImageScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="ProductGraphs"
+                                      component={ProductGraphs}
+                                    />
+                                    <Stack.Screen
+                                      name="VideoStoryScreen"
+                                      component={VideoStoryScreen}
+                                    />
+
+                                    <Stack.Screen
+                                      name="SalesData"
+                                      component={SalesData}
+                                    />
+                                    <Stack.Screen
+                                      name="EmailConfirmationScreen"
+                                      component={EmailConfirmationScreen}
+                                    />
+                                    <Stack.Screen
+                                      name="InfoForProductsForm"
+                                      component={InfoForProductsForm}
+                                    />
+                                    <Stack.Screen
+                                      name="InternalStandardsForm"
+                                      component={InternalStandardsForm}
+                                    />
+                                  </Stack.Navigator>
+                                </NavigationContainer>
+                              </Provider>
+                            </ImagesDataContextProvider>
+                          </CustomerQueryFormContextProvider>
+                        </SalesDataContextProvider>
+                      </ProductsRefreshContextProvider>
+                    </LoginDataContextProvider>
+                  </ReduxProvider>
                 </ApolloProvider>
-                </CopilotProvider>
+              </CopilotProvider>
             </AlertDropdownContextProvider>
           </KeyboardStatusContextProvider>
         </LanguageProvider>

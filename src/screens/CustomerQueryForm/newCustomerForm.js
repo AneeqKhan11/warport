@@ -1,5 +1,5 @@
-import React, { useEffect,useContext, useState } from 'react'
-import { StyleSheet, View, Text, ScrollView, Alert ,ImageBackground} from 'react-native'
+import React, { useEffect, useContext, useState } from 'react'
+import { StyleSheet, View, Text, ScrollView, Alert, ImageBackground } from 'react-native'
 import BackButtonWithTitleAndComponent from '../../components/BackButtonWithTitleAndComponent'
 import { connect } from 'react-redux'
 import {
@@ -50,28 +50,26 @@ import { useNavigation } from '@react-navigation/native'
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    height:'100%'
   },
   title: {
     marginTop: 0,
   },
   textField: {
-    marginVertical: 0,
-    marginTop: 5,
+    borderRadius: 0,
+    backgroundColor: '#FFF',
+    marginVertical: 10
   },
   submitButton: {
-    width: 40,
-    minWidth: 55,
-    minHeight: 10,
+    height: 55,
+    borderRadius: 5,
   },
   submitButtonText: {
     marginHorizontal: 0,
     fontSize: 13,
     paddingHorizontal: 0,
-    height: 25,
   },
   submitButtonContent: {
-    height: 30,
+    height:50,
   },
   formFieldTitle: {
     paddingVertical: 5,
@@ -90,8 +88,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: 'transparent',
-    height:'100%',
-    flexGrow:1
+    height: '100%',
+    flexGrow: 1
   },
   scrollContentContainer: {
     paddingTop: 0,
@@ -134,15 +132,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   customerQueryFormContactNoContainerStyle: {
-    marginTop: 5,
+    marginVertical: 10,
+    borderRadius: 0
   },
-  formContainer:{
-   paddingRight:15,
-   paddingLeft:15,
-   height:'130%'
+  formContainer: {
+    paddingRight: 15,
+    paddingLeft: 15,
+    height: '130%'
   },
-  backgroundStyle:{
-    marginBottom:400
+  backgroundStyle: {
+    marginBottom: 400
   }
 })
 
@@ -159,8 +158,8 @@ function newCustomerForm(props) {
   const [email, setEmail] = useState("")
   const [city, setCity] = useState("")
   const [address, setAddress] = useState("")
-  const [userProfileProfileAvatar,setUserProfileProfileAvatar] = useState()
-  const handleBackPress = ()=>{
+  const [userProfileProfileAvatar, setUserProfileProfileAvatar] = useState()
+  const handleBackPress = () => {
     navigation.goBack()
     return true
   }
@@ -237,7 +236,7 @@ function newCustomerForm(props) {
         setBack(true)
         props.setCustomerQueryFormReset() //check after removing bottom setCustomerQueryFormProductDetailsAdded it will not delete products
         props.setCustomerQueryFormProductDetailsAdded([]);
-     
+
       } else {
         setAlertMessage(addCustomerQueryFormsMutationResult.add_customer_query_forms.error)
         setAlertVisible(true)
@@ -252,8 +251,8 @@ function newCustomerForm(props) {
   }, [addCustomerQueryFormsMutationResult])
 
   const onSubmitPress = async () => {
-   
-    
+
+
     const companyNameError = companyNameValidator(
       props.customerQueryFormCompanyName.value
     )
@@ -290,14 +289,14 @@ function newCustomerForm(props) {
           ).replace(/\s/g, ''),
           email: email,
           city: city,
-          address:address,
-          logo: userProfileProfileAvatar? userProfileProfileAvatar:"",
+          address: address,
+          logo: userProfileProfileAvatar ? userProfileProfileAvatar : "",
         },
       })
     } catch (ex) {
       console.log(ex)
       props.setCustomerQueryFormLoading(false)
-      if (ex.networkError){
+      if (ex.networkError) {
         setAlertMessage("Check your Internet Connection")
         setAlertVisible(true)
       }
@@ -307,138 +306,147 @@ function newCustomerForm(props) {
 
   return (
     <BottomSheetModalProvider>
-    <ScrollView style={styles.mainContainer}>
-      {
-             alertVisible && <AlertView message={alertMessage} back={back} visible={setAlertVisible}></AlertView>
-      }
-      <BackButtonWithTitleAndComponent
-        goBack={() => {
-          navigation.goBack()
-          props.setCustomerQueryFormReset()
-        }}
-        title={translation('New Buyer Form')}
-      >
-        <LoadingButton
-          contentStyle={styles.submitButtonContent}
-          textStyle={styles.submitButtonText}
-          disabled={props.customerQueryFormLoading}
-          loading={props.customerQueryFormLoading}
-          mode="contained"
-          onPress={() => {
-            onSubmitPress()
+      <ScrollView style={styles.mainContainer}>
+        {
+          alertVisible && <AlertView message={alertMessage} back={back} visible={setAlertVisible}></AlertView>
+        }
+        <BackButtonWithTitleAndComponent
+          goBack={() => {
+            navigation.goBack()
+            props.setCustomerQueryFormReset()
           }}
-          style={styles.submitButton}
+          title={translation('New Buyer Form')}
+          mainContainers={20}
+          headerText={50}
+          mainContainer={{
+            backgroundColor: '#FFF'
+          }}
         >
-          {!props.customerQueryFormLoading && translation('Save')}
-        </LoadingButton>
-      </BackButtonWithTitleAndComponent>
-      
-      <View style={styles.backgroundStyle}>
-      <ImageBackground
-      source={require('../../assets/background.jpeg')}
-      resizeMode="repeat" 
-      style={styles.formContainer}>
-        <TextInput
-          disabled={props.customerQueryFormLoading}
-          containerStyle={styles.textField}
-          placeholder={translation('Enter Company Name')}
-          returnKeyType="next"
-          value={props.customerQueryFormCompanyName.value}
-          onChangeText={(text) =>
-            props.setCustomerQueryFormCompanyName({ value: text, error: '' })
-          }
-          error={!!props.customerQueryFormCompanyName.error}
-          errorText={translation(props.customerQueryFormCompanyName.error)}
-        />
-        <TextInput
-          disabled={props.customerQueryFormLoading}
-          containerStyle={styles.textField}
-          placeholder={translation('Enter Customer Name')}
-          returnKeyType="next"
-          value={props.customerQueryFormBuyerName.value}
-          onChangeText={(text) =>
-            props.setCustomerQueryFormBuyerName({ value: text, error: '' })
-          }
-          error={!!props.customerQueryFormBuyerName.error}
-          errorText={translation(props.customerQueryFormBuyerName.error)}
-        />
-        <TextInput
-          disabled={props.customerQueryFormLoading}
-          placeholder={translation('Address')}
-          containerStyle={styles.textField}
-          returnKeyType="next"
-          value={address}
-          onChangeText={(text) =>
-            setAddress(text)
-          }
-        />
-        <PhoneNumberInput
-          containerStyle={styles.customerQueryFormContactNoContainerStyle}
-          disabled={props.customerQueryFormLoading}
-          placeholder={translation('Enter Contact Number 1')}
-          value={props.customerQueryFormContactNo.value}
-          initialCallingCode={selectedLanguageLocale.callingCode}
-          initialCountryCode={selectedLanguageLocale.countryCode}
-          error={!!props.customerQueryFormContactNo.error}
-          errorText={translation(props.customerQueryFormContactNo.error)}
-          onChangeText={(text, countryCode, callingCode) =>
-            props.setCustomerQueryFormContactNo({
-              value: text,
-              error: '',
-              country_code: countryCode,
-              calling_code: callingCode,
-            })
-          }
-        />
-        <PhoneNumberInput
-          containerStyle={styles.customerQueryFormContactNoContainerStyle}
-          disabled={props.customerQueryFormLoading}
-          placeholder={translation('Enter Contact Number 2')}
-          value={props.customerQueryFormContactNo2.value}
-          initialCallingCode={selectedLanguageLocale.callingCode}
-          initialCountryCode={selectedLanguageLocale.countryCode}
-          error={!!props.customerQueryFormContactNo2.error}
-          errorText={translation(props.customerQueryFormContactNo2.error)}
-          onChangeText={(text, countryCode, callingCode) =>
-            props.setCustomerQueryFormContactNo2({
-              value: text,
-              error: '',
-              country_code: countryCode,
-              calling_code: callingCode,
-            })
-          }
-        />
-        <TextInput
-          disabled={props.customerQueryFormLoading}
-          placeholder={translation('Enter Email')}
-          containerStyle={styles.textField}
-          returnKeyType="next"
-          value={email}
-          onChangeText={(text) =>
-            setEmail(text)
-          }
-        />
-        <TextInput
-          disabled={props.customerQueryFormLoading}
-          placeholder={translation('City')}
-          containerStyle={styles.textField}
-          returnKeyType="next"
-          value={city}
-          onChangeText={(text) =>
-            setCity(text)
-          }
-        /><View style={{justifyContent:'center', alignItems:'center'}}>
-          <ProfileAvatarWithEdit
+
+        </BackButtonWithTitleAndComponent>
+
+        <View style={styles.backgroundStyle}>
+          <View
+            style={styles.formContainer}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 30, backgroundColor: '#D5D5D5', borderRadius: 12 }}>
+              <ProfileAvatarWithEdit
                 onEditPressed={() => {
                   props.setVendorBottomDrawerToggle(true)
                 }}
                 style={styles.avatar}
                 source={userProfileProfileAvatar}
               />
-              <Text>{translation('Add Buyers logo')}</Text>
-        </View>
-        <BottomDrawerContent
-              
+              <Text style={{fontSize:17,marginTop:10, color:"#402798", fontWeight:"800"}}>{translation('Add Buyers logo')}</Text>
+            </View>
+            <View style={{
+              paddingVertical:30
+            }}>
+              <TextInput
+                disabled={props.customerQueryFormLoading}
+                containerStyle={styles.textField}
+                placeholder={translation('Enter Company Name')}
+                returnKeyType="next"
+                value={props.customerQueryFormCompanyName.value}
+                onChangeText={(text) =>
+                  props.setCustomerQueryFormCompanyName({ value: text, error: '' })
+                }
+                error={!!props.customerQueryFormCompanyName.error}
+                errorText={translation(props.customerQueryFormCompanyName.error)}
+              />
+              <TextInput
+                disabled={props.customerQueryFormLoading}
+                containerStyle={styles.textField}
+                placeholder={translation('Enter Customer Name')}
+                returnKeyType="next"
+                value={props.customerQueryFormBuyerName.value}
+                onChangeText={(text) =>
+                  props.setCustomerQueryFormBuyerName({ value: text, error: '' })
+                }
+                error={!!props.customerQueryFormBuyerName.error}
+                errorText={translation(props.customerQueryFormBuyerName.error)}
+              />
+              <TextInput
+                disabled={props.customerQueryFormLoading}
+                placeholder={translation('Address')}
+                containerStyle={styles.textField}
+                returnKeyType="next"
+                value={address}
+                onChangeText={(text) =>
+                  setAddress(text)
+                }
+              />
+              <PhoneNumberInput
+                containerStyle={styles.customerQueryFormContactNoContainerStyle}
+                disabled={props.customerQueryFormLoading}
+                placeholder={translation('Enter Contact Number 1')}
+                value={props.customerQueryFormContactNo.value}
+                initialCallingCode={selectedLanguageLocale.callingCode}
+                initialCountryCode={selectedLanguageLocale.countryCode}
+                error={!!props.customerQueryFormContactNo.error}
+                errorText={translation(props.customerQueryFormContactNo.error)}
+                onChangeText={(text, countryCode, callingCode) =>
+                  props.setCustomerQueryFormContactNo({
+                    value: text,
+                    error: '',
+                    country_code: countryCode,
+                    calling_code: callingCode,
+                  })
+                }
+              />
+              <PhoneNumberInput
+                containerStyle={styles.customerQueryFormContactNoContainerStyle}
+                disabled={props.customerQueryFormLoading}
+                placeholder={translation('Enter Contact Number 2')}
+                value={props.customerQueryFormContactNo2.value}
+                initialCallingCode={selectedLanguageLocale.callingCode}
+                initialCountryCode={selectedLanguageLocale.countryCode}
+                error={!!props.customerQueryFormContactNo2.error}
+                errorText={translation(props.customerQueryFormContactNo2.error)}
+                onChangeText={(text, countryCode, callingCode) =>
+                  props.setCustomerQueryFormContactNo2({
+                    value: text,
+                    error: '',
+                    country_code: countryCode,
+                    calling_code: callingCode,
+                  })
+                }
+              />
+              <TextInput
+                disabled={props.customerQueryFormLoading}
+                placeholder={translation('Enter Email')}
+                containerStyle={styles.textField}
+                returnKeyType="next"
+                value={email}
+                onChangeText={(text) =>
+                  setEmail(text)
+                }
+              />
+              <TextInput
+                disabled={props.customerQueryFormLoading}
+                placeholder={translation('City')}
+                containerStyle={styles.textField}
+                returnKeyType="next"
+                value={city}
+                onChangeText={(text) =>
+                  setCity(text)
+                }
+              />
+            </View>
+            <LoadingButton
+              contentStyle={styles.submitButtonContent}
+              textStyle={styles.submitButtonText}
+              disabled={props.customerQueryFormLoading}
+              loading={props.customerQueryFormLoading}
+              mode="contained"
+              onPress={() => {
+                onSubmitPress()
+              }}
+              style={styles.submitButton}
+            >
+              {!props.customerQueryFormLoading && translation('Save')}
+            </LoadingButton>
+            <BottomDrawerContent
+
               onCameraPress={() => {
                 props.setVendorBottomDrawerToggle(false)
                 ImageCropPicker.openCamera({
@@ -466,11 +474,11 @@ function newCustomerForm(props) {
               }}
               navigation={props.navigation}
             />
-       
-        </ImageBackground>
-      </View>
-      
-    </ScrollView>
+
+          </View>
+        </View>
+
+      </ScrollView>
     </BottomSheetModalProvider>
   )
 }

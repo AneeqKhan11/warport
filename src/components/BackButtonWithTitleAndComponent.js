@@ -38,10 +38,11 @@ export default function BackButtonWithTitleAndComponent({
   children,
   title,
   mainContainer,
+  mainContainers,
   headerText
 }) {
   return (
-    <View style={[styles.mainContainer, { paddingHorizontal: mainContainer }]}>
+    <View style={[styles.mainContainer, { paddingHorizontal: mainContainers }]}>
       <View style={styles.container}>
         <TouchableOpacity onPress={goBack}>
           <Icon name="arrow-left" size={24} color="gray" />
