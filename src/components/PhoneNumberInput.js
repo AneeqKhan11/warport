@@ -5,16 +5,17 @@ import CountryModal, { DARK_THEME } from './CountryPicker'
 import TextInputMask from 'react-native-text-input-mask'
 import { theme } from '../core/theme'
 import { KeyboardStatusContext } from '../context/KeyboardStatusContextProvider'
+import VerifyContactNo from '../screens/UserProfile/VerifyContactNo'
 const styles = StyleSheet.create({
   container: {
-    height:50,
+    height: 50,
     width: '100%',
     borderRadius: 50, // Numeric value for borderRadius
     overflow: 'hidden',
-    paddingHorizontal:12,
+    paddingHorizontal: 12,
     display: 'flex',
     alignItems: 'center',
-    backgroundColor:'#FFF', 
+    backgroundColor: '#FFF',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: theme.colors.surface,
     width: '100%',
-    
+
   },
   error: {
     fontSize: 13,
@@ -61,6 +62,7 @@ const PhoneNumberInput = (
     placeholder,
     containerStyle,
     value,
+    isTrue,
   },
   props
 ) => {
@@ -142,6 +144,7 @@ const PhoneNumberInput = (
                   setExtracted(text)
                 }}
               />
+              <View style={{ justifyContent: 'center', paddingLeft:12 }}>{isTrue && <VerifyContactNo navigation={props.navigation} />}</View>
             </View>
           )
         }}

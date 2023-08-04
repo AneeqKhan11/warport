@@ -36,31 +36,34 @@ import { useNavigation } from '@react-navigation/native'
 import CustomerQueryFormProductList from './CustomerQueryForm/CustomerQueryFormProductList'
 import DropDown from "react-native-paper-dropdown";
 import AlertView from '../context/AlertView'
+import DropdownTwo from './DropdownTwo'
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    paddingHorizontal: 20
   },
   title: {
     marginTop: 0,
   },
   textField: {
     marginVertical: 0,
-    marginTop: 5,
+    marginTop: 20,
+    borderRadius: 5,
+    height: 40,
   },
   submitButton: {
-    width: 40,
-    minWidth: 55,
-    minHeight: 10,
+    borderRadius: 5,
+    marginTop: 40,
+    height: 45
   },
   submitButtonText: {
     marginHorizontal: 0,
     fontSize: 13,
     paddingHorizontal: 0,
-    height: 25,
+    // height: 25,
   },
   submitButtonContent: {
-    height: 30,
   },
   formFieldTitle: {
     paddingVertical: 5,
@@ -71,6 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: 'transparent',
+    marginTop: 40
   },
   scrollContentContainer: {
     paddingTop: 0,
@@ -90,40 +94,40 @@ function InfoForProductsForm(props) {
   const [showDropDown, setShowDropDown] = useState(false);
   const uomList = [
     {
-        label:"Meter",
-        value:"Meter"
+      label: "Meter",
+      value: "Meter"
     },
     {
-        label:"PCs",
-        value:"PCs"
+      label: "PCs",
+      value: "PCs"
     },
     {
-        label:"Kg",
-        value:"Kg"
+      label: "Kg",
+      value: "Kg"
     },
     {
-        label:"Dzn",
-        value:"Dzn"
+      label: "Dzn",
+      value: "Dzn"
     },
     {
-        label:"Box",
-        value:"Box"
+      label: "Box",
+      value: "Box"
     },
     {
-        label:"CTN",
-        value:"CTN"
+      label: "CTN",
+      value: "CTN"
     },
     {
-        label:"Ft",
-        value:"Ft"
+      label: "Ft",
+      value: "Ft"
     },
     {
-        label:"Inch",
-        value:"Inch"
+      label: "Inch",
+      value: "Inch"
     }
-]
+  ]
   const navigation = useNavigation()
-  const handleBackPress = ()=>{
+  const handleBackPress = () => {
     props.navigation.goBack()
     return true
   }
@@ -159,7 +163,7 @@ function InfoForProductsForm(props) {
       })
       console.log(getCCategoriesQueryResult.get_c_category[0].name)
     }
-  }, [getCCategoriesQueryResult,cCatId])
+  }, [getCCategoriesQueryResult, cCatId])
 
 
   // const findCategoryNameById = (id) => {
@@ -250,7 +254,7 @@ function InfoForProductsForm(props) {
     }
   }, [addInfoForProductsFormsMutationResult])
 
-  const getProductDetails = async(detailsArray) => {
+  const getProductDetails = async (detailsArray) => {
     setCcatId(detailsArray[0].category_c_id)
     console.log(cCatId)
     await getCCategories({
@@ -266,8 +270,8 @@ function InfoForProductsForm(props) {
       value: detailsArray[0].title,
       error: "",
     })
-    props.setInfoForProductsFormProductPrice({ 
-      value: "Rs."+ String(detailsArray[0].price), error: "" 
+    props.setInfoForProductsFormProductPrice({
+      value: "Rs." + String(detailsArray[0].price), error: ""
     })
   }
   const removePressed = () => {
@@ -319,7 +323,7 @@ function InfoForProductsForm(props) {
     // const infoForProductsFormProductPriceError = formRequiredFieldValidator(
     //   props.infoForProductsFormProductPrice.value
     // )
-    
+
     // if (
     //   infoForProductsFormValueCodeIdError ||
     //   infoForProductsFormNameError ||
@@ -357,7 +361,7 @@ function InfoForProductsForm(props) {
     //     value: props.infoForProductsFormLength.value,
     //     error: infoForProductsFormLengthError,
     //   })
-    
+
     //   props.setInfoForProductsFormWidth({
     //     value: props.infoForProductsFormWidth.value,
     //     error: infoForProductsFormWidthError,
@@ -374,7 +378,7 @@ function InfoForProductsForm(props) {
     //     value: props.infoForProductsFormVendor.value,
     //     error: infoForProductsFormVendorError,
     //   })
-     
+
     //   props.setInfoForProductsFormSOUM({
     //     value: props.infoForProductsFormSOUM.value,
     //     error: infoForProductsFormSOUMError,
@@ -398,7 +402,7 @@ function InfoForProductsForm(props) {
     //   })
     //   return
     // }
-  
+
     try {
       props.setInfoForProductsFormLoading(true)
       await addInfoForProductsForms({
@@ -406,7 +410,7 @@ function InfoForProductsForm(props) {
           value_code_id: props.infoForProductsFormValueCodeId.value,
           name: props.infoForProductsFormName.value,
           product_category: props.infoForProductsFormProductCategory.value,
-          uom: props.infoForProductsFormUOM.value? props.infoForProductsFormUOM.value:selectedUom,
+          uom: props.infoForProductsFormUOM.value ? props.infoForProductsFormUOM.value : selectedUom,
           length: props.infoForProductsFormLength.value,
           width: props.infoForProductsFormWidth.value,
           height: props.infoForProductsFormHeight.value,
@@ -423,14 +427,14 @@ function InfoForProductsForm(props) {
       props.setInfoForProductsFormLoading(false)
       setAlertMessage(ex.toString())
       setAlertVisible(true)
-    //  alertWithType('error', 'WarePort Error', ex.toString())
+      //  alertWithType('error', 'WarePort Error', ex.toString())
     }
   }
 
   return (
     <ScrollView style={styles.mainContainer}>
       {
-             alertVisible && <AlertView message={alertMessage} back={false} ok={true}></AlertView>
+        alertVisible && <AlertView message={alertMessage} back={false} ok={true}></AlertView>
       }
       <BackButtonWithTitleAndComponent
         goBack={() => {
@@ -438,20 +442,10 @@ function InfoForProductsForm(props) {
           props.navigation.goBack()
         }}
         title={translation('Product Specifications')}
+        mainContainers={0}
+        headerText={30}
       >
-        <LoadingButton
-          contentStyle={styles.submitButtonContent}
-          textStyle={styles.submitButtonText}
-          disabled={props.infoForProductsFormLoading}
-          loading={props.infoForProductsFormLoading}
-          mode="contained"
-          onPress={() => {
-            onSubmitPress()
-          }}
-          style={styles.submitButton}
-        >
-          {!props.infoForProductsFormLoading && translation('Save')}
-        </LoadingButton>
+
       </BackButtonWithTitleAndComponent>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -500,18 +494,35 @@ function InfoForProductsForm(props) {
             })
           }
         /> */}
-        <View style={{marginTop:8,marginLeft:2}}>
-          <DropDown
-                  label={"UOM"}
-                  mode={"outlined"}
-                  visible={showDropDown}
-                  showDropDown={() => setShowDropDown(true)}
-                  onDismiss={() => setShowDropDown(false)}
-                  value={selectedUom}
-                  setValue={setSelectedUom}
-                  list={uomList}
-            />
-        </View>
+        <DropdownTwo
+          placeholder={"UOM"}
+          // mode={"outlined"}
+          visible={showDropDown}
+          showDropDown={() => setShowDropDown(true)}
+          onDismiss={() => setShowDropDown(false)}
+          value={selectedUom}
+          setValue={setSelectedUom}
+          list={uomList}
+          style={{
+            height: 43,
+            backgroundColor:'#FFF',
+            borderRadius:5,
+            ...Platform.select({
+              ios: {
+                shadowColor: 'black',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.2,
+                shadowRadius: 4,
+              },
+              android: {
+                elevation: 4,
+              },
+            }),
+          }}
+          dropDownStyle={{
+            marginTop: 35
+          }}
+        />
         {/* <TextInput
           disabled={props.infoForProductsFormLoading}
           containerStyle={styles.textField}
@@ -635,6 +646,19 @@ function InfoForProductsForm(props) {
           }
         />
         </View> */}
+        <LoadingButton
+          contentStyle={styles.submitButtonContent}
+          textStyle={styles.submitButtonText}
+          disabled={props.infoForProductsFormLoading}
+          loading={props.infoForProductsFormLoading}
+          mode="contained"
+          onPress={() => {
+            onSubmitPress()
+          }}
+          style={styles.submitButton}
+        >
+          {!props.infoForProductsFormLoading && translation('Save')}
+        </LoadingButton>
       </ScrollView>
     </ScrollView>
   )

@@ -48,6 +48,7 @@ export default function Background({ children, containerPaddingZero, containerSt
       <View style={{
         height: "100%",
         paddingBottom: 100,
+        backgroundColor:'#FFF'
 
       }}>
         <TouchableWithoutFeedback

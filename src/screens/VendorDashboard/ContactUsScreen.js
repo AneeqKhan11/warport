@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import { Colors, Text } from 'react-native-paper'
 import BackButtonWithLanguageMenu from '../../components/BackButtonWithLanguageMenu'
 import HideOnKeyboardShow from '../../components/HideOnKeyboardShow'
@@ -22,23 +22,26 @@ import { gql, useMutation } from '@apollo/client'
 import { useDropdownAlert } from '../../context/AlertDropdownContextProvider'
 import { useTranslation } from '../../context/Localization'
 import AlertView from '../../context/AlertView'
+import BackButtonWithTitleAndComponent from '../../components/BackButtonWithTitleAndComponent'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { useNavigation } from '@react-navigation/native'
 
 const styles = StyleSheet.create({
   submitButton: {
     marginTop: 16,
+    borderRadius: 5
   },
-  WhiteView:{
-    width:"100%",
-    padding:20,
-    borderRadius:10,
-    backgroundColor:Colors.white
+  WhiteView: {
+    width: "100%",
+    padding: 20,
   }
 })
 
 function ContactUsScreen(props) {
+  const navigation = useNavigation()
   const [alertMessage, setAlertMessage] = useState('')
   const [alertVisible, setAlertVisible] = useState(false)
-  const [ok,setok] = useState(true)
+  const [ok, setok] = useState(true)
   const [success, setSuccess] = useState(false)
   const { translation } = useTranslation()
   const { alertWithType } = useDropdownAlert()
@@ -126,7 +129,7 @@ function ContactUsScreen(props) {
       })
     } catch (ex) {
       props.setContactUsLoading(false)
-      if (ex.networkError){
+      if (ex.networkError) {
         setAlertMessage("Check your Internet Connection")
         setAlertVisible(true)
       }
@@ -135,46 +138,64 @@ function ContactUsScreen(props) {
   }
 
   return (
-    <Background>
-       {
-             alertVisible && <AlertView message={alertMessage} back={false} ok={ok} visible={setAlertVisible}></AlertView>
+    <Background containerStyle={{ backgroundColor:'#FFF'}}>
+      {
+        alertVisible && <AlertView message={alertMessage} back={false} ok={ok} visible={setAlertVisible}></AlertView>
       }
-      <BackButtonWithLanguageMenu goBack={props.navigation.goBack} showLanguageButton={false}/>
-      {/* <HideOnKeyboardShow> */}
-        <Logo />
+      <BackButtonWithLanguageMenu goBack={props.navigation.goBack} showLanguageButton={false} />
+      <View style={{
+        height: 60,
+        marginTop: -160,
+        justifyContent: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingRight: 100
+      }}>
+        <TouchableOpacity onPress={() => {
+          navigation.goBack()
+        }}>
+          <Icon name="arrow-left" size={24} color="gray" />
+        </TouchableOpacity>
+        <Header>{translation('Contact Us')}</Header>
+      </View>
+      <Logo />
       {/* </HideOnKeyboardShow> */}
-      <Header>{translation('Contact Us')}</Header>
       <View style={styles.WhiteView}>
-      <TextInput
-        placeholder={translation('Please Enter Subject')}
-        value={props.contactUsSubject.value}
-        onChangeText={(text) =>
-          props.setContactUsSubject({ value: text, error: '' })
-        }
-        error={!!props.contactUsSubject.error}
-        errorText={translation(props.contactUsSubject.error)}
-      />
-      <TextInput
-        placeholder={translation('Please Enter Message')}
-        returnKeyType="done"
-        multiline={true}
-        numberOfLines={4}
-        value={props.contactUsMessage.value}
-        onChangeText={(text) =>
-          props.setContactUsMessage({ value: text, error: '' })
-        }
-        error={!!props.contactUsMessage.error}
-        errorText={translation(props.contactUsMessage.error)}
-      />
-      <LoadingButton
-        disabled={props.contactUsLoading}
-        loading={props.contactUsLoading}
-        mode="contained"
-        onPress={onSendPressed}
-        style={styles.submitButton}
-      >
-        {translation('Send')}
-      </LoadingButton>
+        <TextInput
+          containerStyle={{ borderRadius: 5,height:40 }}
+          placeholder={translation('Please Enter Subject')}
+          value={props.contactUsSubject.value}
+          onChangeText={(text) =>
+            props.setContactUsSubject({ value: text, error: '' })
+          }
+          error={!!props.contactUsSubject.error}
+          errorText={translation(props.contactUsSubject.error)}
+        />
+        <TextInput
+          placeholder={translation('Please Enter Message')}
+          containerStyle={{ borderRadius: 5,marginTop:0, height:40}}
+          inputStyle={{paddingTop:30}}
+          returnKeyType="done"
+          multiline={true}
+          numberOfLines={4}
+          value={props.contactUsMessage.value}
+          onChangeText={(text) =>
+            props.setContactUsMessage({ value: text, error: '' })
+          }
+          error={!!props.contactUsMessage.error}
+          errorText={translation(props.contactUsMessage.error)}
+        />
+        <LoadingButton
+          disabled={props.contactUsLoading}
+          loading={props.contactUsLoading}
+          mode="contained"
+          onPress={onSendPressed}
+          style={styles.submitButton}
+        >
+          {translation('Send')}
+        </LoadingButton>
       </View>
     </Background>
   )

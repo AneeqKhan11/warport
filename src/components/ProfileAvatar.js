@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 50,
     backgroundColor: 'white',
-    marginTop: 5,
+    marginBottom: 30,
     borderWidth: 1,
     borderColor: '#c7c7c7',
   },
@@ -20,14 +20,11 @@ const styles = StyleSheet.create({
     opacity:0.8
   },
   EditLogo:{
-    marginLeft:-5,
-    marginRight:10,
     fontSize:10,
+    alignItems:'center'
   },
   addLogo:{
-    fontSize:10,
-    marginRight:10,
-    justifyContent:'center'
+    fontSize:15,
   },
   textStyle:{
     fontSize:12

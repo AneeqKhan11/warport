@@ -15,7 +15,7 @@ import Background from '../../../../components/Background'
 import LoadingButton from '../../../../components/LoadingButton'
 import ProductsSlider from '../../../../components/ProductsSlider'
 import { Button, Colors, Text } from 'react-native-paper'
-import DropDown from "react-native-paper-dropdown";
+import DropdownTwo from "../../../DropdownTwo";
 import {
   setAddEditProductImages,
   setAddEditProductActiveSliderThumbnail,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     minHeight: 10,
     alignSelf: 'center',
     alignItems: 'center',
-    marginLeft:40
+    marginLeft: 40
   },
   submitButtonText: {
     marginHorizontal: 0,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   titleTextField: {
     flex: 1,
     width: 'auto',
-    borderRadius: 0,
+    borderRadius: 5,
   },
   colorPickerContainer: {
     flexDirection: 'row',
@@ -956,9 +956,8 @@ function AddEditProduct(props) {
                   } Discount`}
               </Button>
             </View>
-            <DropDown
-              label={"UOM"}
-              mode={"outlined"}
+            <DropdownTwo
+              placeholder={"UOM"}
               visible={showDropDown}
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
@@ -966,7 +965,20 @@ function AddEditProduct(props) {
               setValue={setSelectedUom}
               list={uomList}
               style={{
-                Background: '#FFF'
+                backgroundColor: '#FFF',
+                borderRadius:5,
+                height: 55,
+                ...Platform.select({
+                  ios: {
+                    shadowColor: 'black',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                  },
+                  android: {
+                    elevation: 4,
+                  },
+                }),
               }}
 
             />

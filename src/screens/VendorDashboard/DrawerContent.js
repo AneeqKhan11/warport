@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Text, Divider, Colors } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Ripple from 'react-native-material-ripple'
@@ -11,134 +11,172 @@ import { setVendorDrawerReset } from '../../store/actions/VendorDrawerActions'
 import { useTranslation } from '../../context/Localization'
 import LanguageButtonMenu from '../../components/LanguageButtonMenu'
 import { useNavigation } from '@react-navigation/native'
-import Tooltip from 'react-native-walkthrough-tooltip';
 import { saveData } from '../../auth/AsyncStorage'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const styles = StyleSheet.create({
+  IconMain: {
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+  },
+
   container: {
     flexDirection: 'column',
     flex: 1,
-    borderRightColor: '#c7c7c7',
+    borderRightColor: '#FFF',
+    backgroundColor: '#FFF',
     borderRightWidth: 1,
   },
   topContainer: {
     alignItems: 'center',
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 8,
+    paddingBottom: 20,
+    backgroundColor: "#BBDEFB"
   },
   topContainerUserInfo: {
-    flexDirection: 'column',
-    flexWrap:'wrap',
-
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   usernameText: {
-    textAlign: 'left',
+    textAlign: 'center',
     textTransform: 'capitalize',
     fontSize: 21,
     fontWeight: '700',
     color: 'black',
-    marginLeft: 10,
-    flexWrap:'wrap',
-    width:200
+    flexWrap: 'wrap',
+    width: 200
   },
   usernameNumber: {
     fontSize: 15,
     color: 'gray',
-    marginLeft: 10,
     marginTop: 5,
   },
   avatar: {
-    marginRight: 10,
+    marginLeft: 20,
+    backgroundColor: 'blue'
   },
   midContainer: {
     flexGrow: 1,
     borderTopColor: '#c7c7c7',
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
   },
   menuBtn: {
-    paddingVertical: 18,
-    alignContent: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: 'white',
     flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 7,
+    paddingRight:40
   },
   menuItemDivider: {
     backgroundColor: 'transparent',
-    marginHorizontal: 20,
-    marginVertical: 10,
   },
   menuBtnIcon: {
     marginLeft: 10,
-
-    padding: 7,
-    borderRadius: 8,
+    height: 30,
+    width: 30,
   },
   menuBtnIconPrimaryColor: {
-    backgroundColor: theme.colors.primary,
-  },
-  menuBtnIconGreen: {
-    backgroundColor: '#27b557',
-  },
-  menuBtnIconPink: {
-    backgroundColor: "#ff4081",
+    paddingTop: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   menuBtnIconRed: {
     backgroundColor: theme.colors.error,
   },
-  
-  menuBtnIconBlue:{
-    backgroundColor: '#4285f4',
-  },
+
   logoutBtn: {
     paddingVertical: 18,
     justifyContent: 'flex-start',
     alignContent: 'center',
     backgroundColor: 'white',
     flexDirection: 'row',
-    flex:1
+    flex: 1
   },
   menuText: {
-    fontSize: 18,
+    marginTop: 5,
+    fontSize: 15,
     color: 'black',
-    marginLeft: 10,
-    marginTop: 3,
-    marginRight:3
   },
-  menuLoginText: {
-    marginLeft: 20,
-    marginRight:10
+  DrawerText: {
+    width: 170
   },
   logoutContainer: {
     flexDirection: 'row',
   },
-  languageBtn:{
-    paddingHorizontal:5,
-    borderLeftColor:"#b3b0b0",
-    borderLeftWidth:1,
-    backgroundColor:"white",
-    flex:1,
-    justifyContent:"center"
+  languageBtn: {
+    paddingHorizontal: 5,
+    borderLeftColor: "#b3b0b0",
+    borderLeftWidth: 1,
+    backgroundColor: "white",
+    flex: 1,
+    justifyContent: "center"
   },
-  rfqText:{
-    fontSize:12,
-    marginTop:4,
-    alignSelf:'center'
+  rfqText: {
+    fontSize: 12,
+    marginTop: 4,
+    alignSelf: 'center'
   },
   contentStyle: {
     padding: 20,
-    color:'black'
+    color: 'black'
   },
 })
 
 function DrawerContent(props) {
   const navigation = useNavigation()
   const { translation } = useTranslation()
-
+  const handleCloseDrawer = async () => {
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
+    await saveData("ROUTE", "Home");
+    props.setVendorDrawerReset();
+  };
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
+        <View style={{
+          height: 40,
+          marginTop:10,
+          width: "100%",
+          paddingRight: 10,
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          backgroundColor: "#BBDEFB"
+        }}>
+          <TouchableOpacity
+            onPress={handleCloseDrawer}
+            style={{
+              height: 30,
+              width: 30,
+              borderRadius: 100,
+              backgroundColor: '#FFF',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 0.5,
+              borderColor: '#A2A2A2',
+              ...Platform.select({
+                ios: {
+                  shadowColor: 'black',
+                  shadowOffset: { width: 0, height: 20 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 4,
+                },
+                android: {
+                  elevation: 4,
+                },
+              }),
+            }}>
+
+            <Entypo name='cross' color={"black"} size={20} />
+          </TouchableOpacity>
+        </View>
+        <ProfileAvatar
+          style={styles.avatar}
+          source={props.userAuthData.avatar}
+        />
         <View style={styles.topContainerUserInfo}>
           <Text style={styles.usernameText}>
             {props.userAuthData.company_name}
@@ -147,10 +185,6 @@ function DrawerContent(props) {
             {props.userAuthData.contact_no}
           </Text>
         </View>
-        <ProfileAvatar
-          style={styles.avatar}
-          source={props.userAuthData.avatar}
-        />
       </View>
       <View style={styles.midContainer}>
         <Ripple
@@ -159,29 +193,33 @@ function DrawerContent(props) {
           }}
           style={styles.menuBtn}
         >
-          <Icon
-            style={[styles.menuBtnIcon, styles.menuBtnIconPrimaryColor]}
-            name={'user'}
-            size={17}
-            color={'white'}
-          />
-          <Text style={styles.menuText}> {translation('Profile')}</Text>
+          <View style={styles.IconMain}>
+            <Icon
+              name={'user'}
+              size={20}
+              color={'black'}
+            />
+          </View>
+          <View style={styles.DrawerText}>
+            <Text style={styles.menuText}> {translation('Profile')}</Text>
+          </View>
         </Ripple>
         {/* <Divider style={styles.menuItemDivider} /> */}
-        <Divider  style={[{borderTopColor:"#c3c3c3",borderTopWidth:1},styles.menuItemDivider]} />
+        <Divider style={[{ borderTopColor: "#c3c3c3", borderTopWidth: 1 }, styles.menuItemDivider]} />
         <Ripple
           style={styles.menuBtn}
           onPress={() => {
             props.navigation.navigate('InfoForProductsForm')
           }}
         >
-          <Icon
-            style={[styles.menuBtnIcon, styles.menuBtnIconPink]}
-            name={'info'}
-            size={17}
-            color={'white'}
-          />
-          <Text style={styles.menuText}> {translation('Logistics (Coming Soon)')}</Text>
+          <View style={styles.IconMain}>
+            <Icon
+              name={'info'}
+              size={24}
+              color={'black'}
+            />
+          </View>
+          <View style={styles.DrawerText}><Text style={styles.menuText}> {translation('Logistics (Coming Soon)')}</Text></View>
         </Ripple>
 
         {/* <Ripple
@@ -193,8 +231,8 @@ function DrawerContent(props) {
           <Icon
             style={[styles.menuBtnIcon, styles.menuBtnIconBlue]}
             name={'database'}
-            size={17}
-            color={'white'}
+            size={24}
+            color={'black'}
           />
           <Text style={styles.menuText}> {translation('Customers Entry')}</Text>
           <Text style={styles.rfqText}> {translation('(For RFQs)')}</Text>
@@ -218,56 +256,58 @@ function DrawerContent(props) {
           <Icon
             style={[styles.menuBtnIcon, styles.menuBtnIconRed]}
             name={'product-hunt'}
-            size={17}
-            color={'white'}
+            size={24}
+            color={'black'}
           />
           <Text style={styles.menuText}> {translation('Products List')}</Text>
         </Ripple> */}
         {/* </Tooltip> */}
-        <Divider  style={[{borderTopColor:"#c3c3c3",borderTopWidth:1},styles.menuItemDivider]} />
-        
+        <Divider style={[{ borderTopColor: "#c3c3c3", borderTopWidth: 1 }, styles.menuItemDivider]} />
+
         <Ripple
           style={styles.menuBtn}
           onPress={() => {
             props.navigation.navigate('ContactUsScreen')
           }}
         >
-          <Icon
-            style={[styles.menuBtnIcon, styles.menuBtnIconGreen]}
-            name={'phone'}
-            size={17}
-            color={'white'}
-          />
-          <Text style={styles.menuText}> {translation('Contact Us')}</Text>
+          <View style={styles.IconMain}>
+            <Icon
+              name={'phone'}
+              size={24}
+              color={'black'}
+            />
+          </View>
+          <View style={styles.DrawerText}><Text style={styles.menuText}> {translation('Contact Us')}</Text></View>
         </Ripple>
-      </View>
-      
-      <View style={styles.logoutContainer}>
+        <Divider style={[{ borderTopColor: "#c3c3c3", borderTopWidth: 1 }, styles.menuItemDivider]} />
         <Ripple
-          style={styles.logoutBtn}
+          style={styles.menuBtn}
           onPress={async () => {
             // await removeLoginUserId()
             props.navigation.reset({
               index: 0,
               routes: [{ name: 'LoginScreen' }],
             })
-            await saveData("ROUTE","LoginScreen")
+            await saveData("ROUTE", "LoginScreen")
             // props.navigation.navigate("LoginScreen")
             props.setVendorDrawerReset()
           }}
         >
-          <Icon
-            style={[styles.menuBtnIcon, styles.menuBtnIconRed]}
-            name={'sign-out'}
-            size={17}
-            color={'white'}
-          />
-          <Text style={[styles.menuText, styles.menuLoginText]}>
-            {translation('Logout')}
-          </Text>
+          <View style={styles.IconMain}>
+            <Icon
+              name={'sign-out'}
+              size={24}
+              color={'black'}
+            />
+          </View>
+          <View style={styles.DrawerText}>
+            <Text style={[styles.menuText, styles.menuLoginText]}>
+              {translation('Logout')}
+            </Text>
+          </View>
         </Ripple>
-        {/* <LanguageButtonMenu languageButtonStyle={styles.languageBtn}/> */}
-        </View>
+        <Divider style={[{ borderTopColor: "#c3c3c3", borderTopWidth: 1 }, styles.menuItemDivider]} />
+      </View>
     </View>
   )
 }

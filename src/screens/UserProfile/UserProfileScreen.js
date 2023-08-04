@@ -63,20 +63,23 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: '100%',
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFF',
   },
   scrollContainer: {
     width: '100%',
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFF',
+    marginTop: -30
   },
   scrollContentContainer: {
     alignItems: 'center',
-    marginBottom: Dimensions.get('window').height*0.18
+    // marginBottom: Dimensions.get('window').height * 0.18
   },
   submitButton: {
-    width: 40,
+    height: 40,
+    borderRadius: 5,
     minWidth: 55,
     minHeight: 10,
+    marginTop:30
   },
   container: {
     paddingHorizontal: 20,
@@ -94,11 +97,16 @@ const styles = StyleSheet.create({
   },
   flexInput: {
     flex: 1,
+    height:45,
+    borderRadius: 5
+
   },
   inputWithVerifyContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderRadius: 5,
+    
   },
   contentLoadingContainer: {
     flex: 1,
@@ -125,20 +133,19 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 3,
   },
-  internalStandardView:{
-    marginTop:-200
+  internalStandardView: {
+    marginTop: -200
   },
-  lottieView:{
-    position:'absolute',
-    width:100,
-    height:100,
-    top:"75%"
+  lottieView: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    top: "75%"
   },
-  FormView:{
-    width:"100%",
-    padding:10,
-    borderRadius:10,
-    backgroundColor:Colors.white
+  FormView: {
+    width: "100%",
+    padding: 10,
+    borderRadius: 10,
   }
 })
 
@@ -147,17 +154,17 @@ function UserProfileScreen(props) {
   const { translation } = useTranslation()
   const [userAddress, setUserAddress] = useState(getUserAddress())
   const navigation = useNavigation()
-  const [alertMessage , setAlertMessage] = useState("")
+  const [alertMessage, setAlertMessage] = useState("")
   const [alertVisible, setAlertVisible] = useState(false)
   const [back, setBack] = useState(false)
   const emailVerified = true
   // const animationRef = useRef(null)
-  
+
   // useEffect(() => {
   //   animationRef.current?.play()
   // }, [])
-  
-  const handleBackPress = ()=>{
+
+  const handleBackPress = () => {
     navigation.goBack()
     return true
   }
@@ -279,13 +286,13 @@ function UserProfileScreen(props) {
     }
     if (props.userAddress != null) {
       props.setUserProfileAddress({
-        value:props.userAddress.value,
+        value: props.userAddress.value,
         error: '',
       })
-    }else{
+    } else {
       props.setUserProfileAddress({
-        value:props.userAuthData.address,
-        error:''
+        value: props.userAuthData.address,
+        error: ''
       })
     }
   }
@@ -335,11 +342,11 @@ function UserProfileScreen(props) {
     //   })
     //   return
     // }
-    
-    
+
+
     try {
       props.setUserProfileLoading(true)
-      if(userAddress!=null){
+      if (userAddress != null) {
         await setAddressAuth(userAddress)
       }
       await updateProfile({
@@ -363,7 +370,7 @@ function UserProfileScreen(props) {
       setAlertVisible(true)
     } catch (ex) {
       props.setUserProfileLoading(false)
-      if (ex.networkError){
+      if (ex.networkError) {
         setAlertMessage("Check your Internet Connection")
         setAlertVisible(true)
       }
@@ -372,9 +379,9 @@ function UserProfileScreen(props) {
   }
 
   return (
-      <ScrollView style={{flexGrow:1}}>
+    <ScrollView style={{ flexGrow: 1 ,backgroundColor:'#FFF'}}>
       {
-             alertVisible && <AlertView message={alertMessage} back={back} visible={setAlertVisible}></AlertView>
+        alertVisible && <AlertView message={alertMessage} back={back} visible={setAlertVisible}></AlertView>
       }
       <BackButtonWithTitleAndComponent
         goBack={() => {
@@ -382,102 +389,116 @@ function UserProfileScreen(props) {
           props.setUserProfileReset()
         }}
         title={translation('Profile')}
+        mainContainers={20}
+        headerText={95}
       >
-        <LoadingButton
-          contentStyle={[
-            styles.submitButtonContent,
-            props.userProfileLoading ? { width: 40 } : null,
-          ]}
-          textStyle={styles.submitButtonText}
-          disabled={props.userProfileLoading || props.userProfileContentLoading}
-          loading={props.userProfileLoading}
-          mode="contained"
-          onPress={onSavePressed}
-          style={styles.submitButton}
-        >
-          {!props.userProfileLoading && translation('Save')}
-        </LoadingButton>
       </BackButtonWithTitleAndComponent>
-      
+
       <Background>
 
 
-          <BottomSheetModalProvider>
-            {/* <KeyboardAvoidingView
+        <BottomSheetModalProvider>
+          {/* <KeyboardAvoidingView
               behavior="height"
               style={styles.contentContainer}
             > */}
-            
-              <ScrollView
-                contentContainerStyle={styles.scrollContentContainer}
-                showsVerticalScrollIndicator={false}
-                style={styles.scrollContainer}
-              >
-                
-                <ProfileAvatarWithEdit
-                  onEditPressed={() => {
-                    props.setVendorBottomDrawerToggle(true)
-                  }}
-                  style={styles.avatar}
-                  source={props.userProfileProfileAvatar}
-                />
-                <View style={styles.FormView}>
-                <TextInput
-                  placeholder={translation('Please Enter Company Name')}
-                  returnKeyType="next"
-                  value={props.userProfileCompanyName.value}
+
+          <ScrollView
+            contentContainerStyle={styles.scrollContentContainer}
+            showsVerticalScrollIndicator={false}
+            style={styles.scrollContainer}
+          >
+
+            <View style={{
+              paddingVertical: 20,
+              backgroundColor: '#D5D5D5',
+              borderRadius: 12,
+              width: "100%",
+              alignItems: 'center'
+            }}>
+              <ProfileAvatarWithEdit
+                onEditPressed={() => {
+                  props.setVendorBottomDrawerToggle(true)
+                }}
+                style={styles.avatar}
+                source={props.userProfileProfileAvatar}
+              />
+            </View>
+            <View style={styles.FormView}>
+              <TextInput
+                containerStyle={styles.flexInput}
+                placeholder={translation('Please Enter Company Name')}
+                returnKeyType="next"
+                value={props.userProfileCompanyName.value}
+                disabled={props.userProfileLoading}
+                onChangeText={(text) =>
+                  props.setUserProfileCompanyName({ value: text, error: '' })
+                }
+                error={!!props.userProfileCompanyName.error}
+                errorText={translation(props.userProfileCompanyName.error)}
+              />
+              <View style={styles.inputWithVerifyContainer}>
+
+                <PhoneNumberInput
+                  isTrue={true}
+                  containerStyle={styles.flexInput}
+                  placeholder={translation('Contact Number')}
+                  value={props.userProfileContactNo.value}
                   disabled={props.userProfileLoading}
-                  onChangeText={(text) =>
-                    props.setUserProfileCompanyName({ value: text, error: '' })
+                  initialCallingCode={props.userProfileContactNo.calling_code}
+                  initialCountryCode={props.userProfileContactNo.country_code}
+                  error={!!props.userProfileContactNo.error}
+                  errorText={translation(props.userProfileContactNo.error)}
+                  onChangeText={(text, countryCode, callingCode) =>
+                    props.setUserProfileContactNo({
+                      value: text,
+                      error: '',
+                      country_code: countryCode,
+                      calling_code: callingCode,
+                    })
                   }
-                  error={!!props.userProfileCompanyName.error}
-                  errorText={translation(props.userProfileCompanyName.error)}
                 />
-                <View style={styles.inputWithVerifyContainer}>
-              
-                  <PhoneNumberInput
-                    containerStyle={styles.flexInput}
-                    placeholder={translation('Contact Number')}
-                    value={props.userProfileContactNo.value}
-                    disabled={props.userProfileLoading}
-                    initialCallingCode={props.userProfileContactNo.calling_code}
-                    initialCountryCode={props.userProfileContactNo.country_code}
-                    error={!!props.userProfileContactNo.error}
-                    errorText={translation(props.userProfileContactNo.error)}
-                    onChangeText={(text, countryCode, callingCode) =>
-                      props.setUserProfileContactNo({
-                        value: text,
-                        error: '',
-                        country_code: countryCode,
-                        calling_code: callingCode,
-                      })
-                    }
-                  />
-                  <VerifyContactNo navigation={props.navigation} />
-                </View>
+                {/* <VerifyContactNo navigation={props.navigation} /> */}
+              </View>
+              <TextInput
+                placeholder={translation('Please Enter Address')}
+                containerStyle={styles.flexInput}
+                returnKeyType="next"
+                value={userAddress}
+                onChangeText={setUserAddress}
+              />
+              <View style={styles.inputWithVerifyContainer}>
                 <TextInput
-                    placeholder={translation('Please Enter Address')}
-                    containerStyle={styles.flexInput}
-                    returnKeyType="next"
-                    value={userAddress}
-                    onChangeText={setUserAddress}
-                  />
-                <View style={styles.inputWithVerifyContainer}>
-                  <TextInput
-                    placeholder={translation('Please Enter Company Adress')}
-                    containerStyle={styles.flexInput}
-                    returnKeyType="next"
-                    value={props.userProfileEmail.value}
-                    onChangeText={(text) =>
-                      props.setUserProfileEmail({ value: text, error: '' })
-                    }
-                    error={!!props.userProfileEmail.error}
-                    errorText={props.userProfileEmail.error}
-                  />
-                  {/* <VerifyEmail navigation={props.navigation} /> */}
-                  </View>
-                </View>
-                {/* <Ripple
+                  placeholder={translation('Please Enter Company Adress')}
+                  containerStyle={[styles.flexInput, {marginTop:0}]}
+                  returnKeyType="next"
+                  value={props.userProfileEmail.value}
+                  onChangeText={(text) =>
+                    props.setUserProfileEmail({ value: text, error: '' })
+                  }
+                  error={!!props.userProfileEmail.error}
+                  errorText={props.userProfileEmail.error}
+                />
+                {/* <VerifyEmail navigation={props.navigation} /> */}
+              </View>
+
+              <LoadingButton
+                contentStyle={[
+                  styles.submitButtonContent,
+                  props.userProfileLoading ? { width: 40 } : null,
+                ]}
+                textStyle={styles.submitButtonText}
+                disabled={props.userProfileLoading || props.userProfileContentLoading}
+                loading={props.userProfileLoading}
+                mode="contained"
+                onPress={onSavePressed}
+                style={styles.submitButton}
+
+              >
+                {!props.userProfileLoading && translation('Save')}
+              </LoadingButton>
+            </View>
+            {/* <Ripple
                   style={styles.menuBtn}
                   onPress={() => {
                     props.navigation.navigate('InternalStandardsForm')
@@ -491,53 +512,53 @@ function UserProfileScreen(props) {
                   />
                   <Text style={styles.menuText}> {translation('Internal Standards')}</Text>
                 </Ripple> */}
-                
-              </ScrollView>
-              <Lottie
-                  style={styles.lottieView}
-                    autoPlay={true}
-                    loop={true}
-                    source={require('../../../assets/scroll-down-arrow.json')}
-                  />
-            {/* </KeyboardAvoidingView> */}
-            <BottomDrawerContent
-              onCameraPress={() => {
-                props.setVendorBottomDrawerToggle(false)
-                ImagePicker.openCamera({
-                  width: 300,
-                  height: 400,
-                  cropping: true,
-                  includeBase64: true,
-                }).then((image) => {
-                  props.setUserProfileProfileAvatar(
-                    `data:${image.mime};base64,` + image.data
-                  )
-                })
-              }}
-              onGalleryPress={() => {
-                props.setVendorBottomDrawerToggle(false)
-                ImagePicker.openPicker({
-                  multiple: false,
-                  cropping: true,
-                  includeBase64: true,
-                }).then((image) => {
-                  props.setUserProfileProfileAvatar(
-                    `data:${image.mime};base64,` + image.data
-                  )
-                })
-              }}
-              navigation={props.navigation}
-            />
-            
-          </BottomSheetModalProvider>
-      
+
+          </ScrollView>
+          <Lottie
+            style={styles.lottieView}
+            autoPlay={true}
+            loop={true}
+            source={require('../../../assets/scroll-down-arrow.json')}
+          />
+          {/* </KeyboardAvoidingView> */}
+          <BottomDrawerContent
+            onCameraPress={() => {
+              props.setVendorBottomDrawerToggle(false)
+              ImagePicker.openCamera({
+                width: 300,
+                height: 400,
+                cropping: true,
+                includeBase64: true,
+              }).then((image) => {
+                props.setUserProfileProfileAvatar(
+                  `data:${image.mime};base64,` + image.data
+                )
+              })
+            }}
+            onGalleryPress={() => {
+              props.setVendorBottomDrawerToggle(false)
+              ImagePicker.openPicker({
+                multiple: false,
+                cropping: true,
+                includeBase64: true,
+              }).then((image) => {
+                props.setUserProfileProfileAvatar(
+                  `data:${image.mime};base64,` + image.data
+                )
+              })
+            }}
+            navigation={props.navigation}
+          />
+
+        </BottomSheetModalProvider>
+
       </Background>
       <View style={styles.internalStandardView}>
-      <Background>
-      <InternalStandardsForm/>
-      </Background>
+        <Background>
+          <InternalStandardsForm />
+        </Background>
       </View>
-      </ScrollView>
+    </ScrollView>
   )
 }
 const mapStateToProps = (state) => {
