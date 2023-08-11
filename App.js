@@ -75,6 +75,8 @@ import { getData, saveData } from './src/auth/AsyncStorage'
 import ProductGraphs from './src/screens/VendorDashboard/ReportingScreen/screenComponents/ProductGraphs'
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
+import DummyScreen from './src/components/AppToure'
+import AppToure from './src/components/AppToure'
 
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
@@ -273,6 +275,10 @@ export default function App() {
                                       headerShown: false,
                                     }}
                                   >
+                                    <Stack.Screen
+                                      name='DummyScreen'
+                                      component={DummyScreen}
+                                    />
                                     <Stack.Screen
                                       name="SelectRegionScreen"
                                       component={SelectRegionScreen}

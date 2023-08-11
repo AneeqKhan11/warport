@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
-  ImageBackground,
+  Image,
   BackHandler,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -32,6 +32,7 @@ import {
   setAddEditProductLoadingPercentage,
   setAddEditProductReset,
 } from '../../../../store/actions/AddEditProductActions'
+import AppIntroSlider from 'react-native-app-intro-slider';
 import { setCustomerQueryFormProductDetailsAdded } from '../../../../store/actions/CustomerQueryFormActions'
 import TextInput from '../../../../components/TextInput'
 import BackButtonWithTitleAndComponent from '../../../../components/BackButtonWithTitleAndComponent'
@@ -66,6 +67,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getData, saveData } from '../../../../auth/AsyncStorage';
 import { getValue, setValue1 } from '../../../../auth/LocalStorage';
 import CustomDropDown from '../../../../components/customDropdowm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   title: {
@@ -104,6 +106,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     marginLeft: 40
+  },
+  slide: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "red",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  text: {
+    fontSize: 18,
+    color: 'black',
   },
   submitButtonText: {
     marginHorizontal: 0,
@@ -238,6 +255,7 @@ function AddEditProduct(props) {
   const [stock, setStock] = useState("")
   const [price2, setPrice2] = useState(0)
   const [exitAlert, setExitAlert] = useState(false)
+  const [showSlider, setShowSlider] = useState(true)
   const colorOptions = [
     { label: 'Red', value: 'red' },
     { label: 'Blue', value: 'blue' },
@@ -246,7 +264,6 @@ function AddEditProduct(props) {
     { label: 'Custom', value: 'Custom' },
   ];
   const [selectedColor, setSelectedColor] = useState([]);
-  console.log("🚀 ~ file: AddEditProduct.js:247 ~ AddEditProduct ~ selectedColor:", selectedColor)
   const handleColorChange = (color) => {
     setSelectedColor(color);
   };
@@ -747,338 +764,374 @@ function AddEditProduct(props) {
     // props.setAddEditProductReset()
     // setStock("")
   }
+  const _renderItem = ({ item }) => {
+    return (
+      <View style={styles.slide}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Image source={item.image} />
+        <Text style={styles.text}>{item.text}</Text>
+      </View>
+    );
+  }
+  const slides = [
+    {
+      key: 1,
+      title: 'Title 1',
+      text: 'Description.\nSay something cool',
+      // image: require('./assets/1.jpg'),
+      backgroundColor: '#59b2ab',
+    },
+    {
+      key: 2,
+      title: 'Title 2',
+      text: 'Other cool stuff',
+      // image: require('./assets/2.jpg'),
+      backgroundColor: '#febe29',
+    },
+    {
+      key: 3,
+      title: 'Rocket guy',
+      text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
+      // image: require('./assets/3.jpg'),
+      backgroundColor: '#22bcb5',
+    }
+  ];
+
+  const handleDisplayAppIntro = () => {
+    AsyncStorage.setItem("showSlider", JSON.stringify(showSlider))
+  }
+
 
   return (
-    <BottomSheetModalProvider>
-      <ScrollView style={styles.mainContainer}>
+    <>{!showSlider ?
+      <AppIntroSlider
+        renderItem={_renderItem}
+        data={slides}
+        showSkipButton={true}
+        onDone={() => { setShowSlider(false) }}
+        onSkip={() => { setShowSlider(false) }}
+      />
+      :
+      <BottomSheetModalProvider>
+        <ScrollView style={styles.mainContainer}>
 
-        {
-          alertVisible && <AlertView message={alertMessage} back={back} ok={ok} success={success} visible={setAlertVisible}></AlertView>
-        }
-        {
-          exitAlert && <AlertView title={"WarePort Alert"} message={"Are you sure you want to Exit App?"} exit={true}></AlertView>
-        }
-        <CircularProgressOverlay
-          visible={props.addEditProductLoading}
-          progressValue={props.addEditProductLoadingPercentage}
-          textContent={
-            (props.route && props.route.params && props.route.params.editItemData
-              ? translation('Updating')
-              : translation('Adding')) +
-            ' ' +
-            translation('products...')
+          {
+            alertVisible && <AlertView message={alertMessage} back={back} ok={ok} success={success} visible={setAlertVisible}></AlertView>
           }
-          textStyle={styles.spinnerTextStyle}
-        />
-        <BackButtonWithTitleAndComponent
-          goBack={() => {
-            props.navigation.goBack()
-            props.setAddEditProductReset()
-          }}
-          title={
-            (props.route && props.route.params && props.route.params.editItemData
-              ? translation('Edit')
-              : translation('Add')) +
-            ' ' +
-            translation('Product')
+          {
+            exitAlert && <AlertView title={"WarePort Alert"} message={"Are you sure you want to Exit App?"} exit={true}></AlertView>
           }
-          mainContainer={20}
-          headerText={60}
-        >
-          {props.route &&
-            props.route.params &&
-            props.route.params.editItemData ? (
-            <LoadingButton
-              contentStyle={styles.submitButtonContent}
-              textStyle={styles.submitButtonText}
-              disabled={props.addEditProductLoading}
-              loading={props.addEditProductLoading}
-              mode="contained"
-              onPress={onEditPressed}
-              style={styles.submitButton}
-            >
-              {!props.addEditProductLoading && translation('Edit')}
-            </LoadingButton>
-          ) : (
-            <LoadingButton
-              contentStyle={styles.submitButtonContent}
-              textStyle={styles.submitButtonText1}
-              disabled={props.addEditProductLoading}
-              loading={props.addEditProductLoading}
-              mode="contained"
-              onPress={onAddPressed}
-              style={styles.submitButton1}
-            >
-              {!props.addEditProductLoading && translation('Save')}
-            </LoadingButton>
-          )}
-        </BackButtonWithTitleAndComponent>
+          <CircularProgressOverlay
+            visible={props.addEditProductLoading}
+            progressValue={props.addEditProductLoadingPercentage}
+            textContent={
+              (props.route && props.route.params && props.route.params.editItemData
+                ? translation('Updating')
+                : translation('Adding')) +
+              ' ' +
+              translation('products...')
+            }
+            textStyle={styles.spinnerTextStyle}
+          />
+          <BackButtonWithTitleAndComponent
+            goBack={() => {
+              props.navigation.goBack()
+              props.setAddEditProductReset()
+            }}
+            title={
+              (props.route && props.route.params && props.route.params.editItemData
+                ? translation('Edit')
+                : translation('Add')) +
+              ' ' +
+              translation('Product')
+
+            }
+            mainContainers={14}
+            headerText={80}
+          >
+            {props.route &&
+              props.route.params &&
+              props.route.params.editItemData ? (
+              <LoadingButton
+                contentStyle={styles.submitButtonContent}
+                textStyle={styles.submitButtonText}
+                disabled={props.addEditProductLoading}
+                loading={props.addEditProductLoading}
+                mode="contained"
+                onPress={onEditPressed}
+                style={styles.submitButton}
+              >
+                {!props.addEditProductLoading && translation('Edit')}
+              </LoadingButton>
+            ) : (
+              <></>
+            )}
+          </BackButtonWithTitleAndComponent>
 
 
-        <View
-          style={styles.formContainer}
-        >
-          {/* <ScrollView
+          <View
+            style={styles.formContainer}
+          >
+            {/* <ScrollView
           showsVerticalScrollIndicator={true}
           contentContainerStyle={styles.scrollContentContainer}
           style={styles.scroll}
         > */}
-          <View style={{ marginBottom: 100, marginTop: 10 }}>
-            <ProductsSlider
-              onAddImagePress={() => {
-                props.setVendorBottomDrawerToggle(true)
-              }}
-              onEditPress={() => {
-                ImagePicker.openCropper({
-                  width: 300,
-                  height: 400,
-                  path: props.addEditProductImages[props.addEditProductActiveSliderThumbnail],
-                }).then((image) => {
-                  addImagePathToAddProductScreen(image.path)
-                })
-              }}
-              onDeletePress={() => {
-                var cloneArray = _.cloneDeep(props.addEditProductImages)
-
-                cloneArray.splice(props.addEditProductActiveSliderThumbnail, 1)
-                props.setAddEditProductImages(cloneArray)
-              }}
-              activeTab={props.addEditProductActiveSliderThumbnail}
-              activeTabChanged={(i) => {
-                props.setAddEditProductActiveSliderThumbnail(i)
-              }}
-              imagesArray={props.addEditProductImages}
-            />
-            <View>
-              <TextInput
-                containerStyle={[styles.titleTextField, styles.textField]}
-                placeholder={translation('Enter Product Name')}
-                value={props.addEditProductTitle.value}
-                error={!!props.addEditProductTitle.error}
-                errorText={translation(props.addEditProductTitle.error)}
-                onChangeText={(text) =>
-                  props.setAddEditProductTitle({ value: text, error: '' })
-                }
-              />
-            </View>
-            <CustomDropDown
-              label={"Select Color :"}
-              value={selectedColor}
-              list={colorOptions}
-              setValue={handleColorChange}
-            />
-
-            <TextInput
-              multiline={true}
-              containerStyle={[
-                styles.descriptionInputContainer,
-              ]}
-              inputStyle={styles.descriptionInput}
-              placeholder={translation('Enter Product Description')}
-              value={props.addEditProductDescription.value}
-              error={!!props.addEditProductDescription.error}
-              errorText={translation(props.addEditProductDescription.error)}
-              onChangeText={(text) =>
-                props.setAddEditProductDescription({
-                  value: text,
-                  error: '',
-                })
-              }
-            />
-            <Text style={{
-              fontSize: 14,
-              color: 'white',
-              backgroundColor: "#000000",
-              width: '55%',
-              padding: 5,
-              marginBottom: 10
-            }}>{translation('Product Price Range (PKR)')}</Text>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <TextInput
-                containerStyle={[styles.priceTextField, { width: 150 }]}
-                placeholder={translation('Rs.')}
-                keyboardType={'numeric'}
-                returnKeyType="next"
-                value={props.addEditProductPrice.value}
-                error={!!props.addEditProductPrice.error}
-                errorText={translation(props.addEditProductPrice.error)}
-                onChangeText={(text) =>
-                  props.setAddEditProductPrice({ value: text, error: '' })
-                }
-              />
-              <Text style={{ justifyContent: 'center', alignSelf: 'center', marginHorizontal: 10 }}>To</Text>
-              <TextInput
-                disabled={false}
-                containerStyle={[styles.priceTextField, { width: 150 }]}
-                placeholder={translation('Rs.')}
-                keyboardType={'numeric'}
-                returnKeyType="next"
-                value={price2}
-                onChangeText={(text) =>
-                  setPrice2(text)
-                }
-              />
-            </View>
-            <View style={[styles.discountModalButtonContainer, props.addEditProductDiscountQuantity.value != '' &&
-              props.addEditProductDiscountPrice.value != '' ? null : { marginTop: 6 }]}>
-              {props.addEditProductDiscountQuantity.value != '' &&
-
-                props.addEditProductDiscountQuantity.value > 0 &&
-                props.addEditProductDiscountPrice.value != '' &&
-                props.addEditProductDiscountPrice.value > 0
-                && (
-                  <View style={styles.discountDiscription}>
-                    <Text
-                      style={styles.discountCalculationText}
-                    >{`Discount Qty >= ${props.addEditProductDiscountQuantity.value
-                      } Price = ${props.addEditProductPrice.value -
-                      (props.addEditProductPrice.value *
-                        props.addEditProductDiscountPrice.value) /
-                      100
-                      }`}</Text>
-                  </View>
-                )}
-              <Button
-                mode="contained"
-                style={styles.discountModalButton}
-                labelStyle={styles.discountModalButtonLabel}
-                onPress={() => {
-                  props.setAddEditProductDiscountModalToggle(true);
+            <View style={{ marginBottom: 100, marginTop: 10 }}>
+              <ProductsSlider
+                onAddImagePress={() => {
+                  props.setVendorBottomDrawerToggle(true)
                 }}
-              >
-                {`${props.addEditProductDiscountQuantity.value != '' &&
-                  props.addEditProductDiscountQuantity.value > 0 &&
-                  props.addEditProductDiscountPrice.value != ''
-                  &&
-                  props.addEditProductDiscountPrice.value > 0
-                  ? 'Edit'
-                  : 'Add'
-                  } Discount`}
-              </Button>
-            </View>
-            <DropdownTwo
-              placeholder={"UOM"}
-              visible={showDropDown}
-              showDropDown={() => setShowDropDown(true)}
-              onDismiss={() => setShowDropDown(false)}
-              value={selectedUom}
-              setValue={setSelectedUom}
-              list={uomList}
-              style={{
-                backgroundColor: '#FFF',
-                borderRadius:5,
-                height: 55,
-                ...Platform.select({
-                  ios: {
-                    shadowColor: 'black',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 4,
-                  },
-                  android: {
-                    elevation: 4,
-                  },
-                }),
-              }}
+                onEditPress={() => {
+                  ImagePicker.openCropper({
+                    width: 300,
+                    height: 400,
+                    path: props.addEditProductImages[props.addEditProductActiveSliderThumbnail],
+                  }).then((image) => {
+                    addImagePathToAddProductScreen(image.path)
+                  })
+                }}
+                onDeletePress={() => {
+                  var cloneArray = _.cloneDeep(props.addEditProductImages)
 
-            />
+                  cloneArray.splice(props.addEditProductActiveSliderThumbnail, 1)
+                  props.setAddEditProductImages(cloneArray)
+                }}
+                activeTab={props.addEditProductActiveSliderThumbnail}
+                activeTabChanged={(i) => {
+                  props.setAddEditProductActiveSliderThumbnail(i)
+                }}
+                imagesArray={props.addEditProductImages}
+              />
+              <View>
+                <TextInput
+                  containerStyle={[styles.titleTextField, styles.textField]}
+                  placeholder={translation('Enter Product Name')}
+                  value={props.addEditProductTitle.value}
+                  error={!!props.addEditProductTitle.error}
+                  errorText={translation(props.addEditProductTitle.error)}
+                  onChangeText={(text) =>
+                    props.setAddEditProductTitle({ value: text, error: '' })
+                  }
+                />
+              </View>
+              <CustomDropDown
+                label={"Select Color :"}
+                value={selectedColor}
+                list={colorOptions}
+                setValue={handleColorChange}
+              />
 
-            <TextInput
-              containerStyle={styles.titleTextField}
-              placeholder={translation('Enter Model Number')}
-              returnKeyType="next"
-              value={modelNumber}
-              onChangeText={(text) =>
-                setModelNumber(text)
-              }
-            />
-            <TextInput
-              containerStyle={styles.titleTextField}
-              placeholder={translation('Enter Batch Number')}
-              returnKeyType="next"
-              value={batchNumber}
-              onChangeText={(text) =>
-                setBatchNumber(text)
-              }
-            />
-
-            <ProductCategoryPopUp getACategories={getACategories} value={false} setVal={setVal} />
-            <CategoryBAutoCompleteDropDown route={props.route} />
-            <CategoryCAutoCompleteDropDown route={props.route} />
-
-            <TextInput
-              containerStyle={[styles.titleTextField]}
-              label={translation('Enter Product Stock')}
-              keyboardType='numeric'
-              value={stock}
-              // error={stock==""}
-              // errorText={stock =="" ? "Stock cannot be zero or empty":""}
-              onChangeText={(text) =>
-                setStock(text)
-              }
-            />
-            <LoadingButton
-              contentStyle={styles.submitButtonContent}
-              textStyle={styles.submitButtonText}
-              disabled={props.addEditProductLoading}
-              loading={props.addEditProductLoading}
-              mode="contained"
-              onPress={onAddPressed}
-              style={styles.submitButton}
-            >
-              {!props.addEditProductLoading && translation('Save')}
-            </LoadingButton>
-
-            <View style={{
-              alignItems: 'center',
-            }}>
+              <TextInput
+                multiline={true}
+                containerStyle={[
+                  styles.descriptionInputContainer,
+                ]}
+                inputStyle={styles.descriptionInput}
+                placeholder={translation('Enter Product Description')}
+                value={props.addEditProductDescription.value}
+                error={!!props.addEditProductDescription.error}
+                errorText={translation(props.addEditProductDescription.error)}
+                onChangeText={(text) =>
+                  props.setAddEditProductDescription({
+                    value: text,
+                    error: '',
+                  })
+                }
+              />
               <Text style={{
-                marginTop: 15,
                 fontSize: 14,
                 color: 'white',
                 backgroundColor: "#000000",
-                width: '30%',
-                padding: 10,
-                textAlign: 'center'
-              }}>Optional</Text>
-            </View>
-            <View style={{
-              alignItems: 'center'
-            }}>
+                width: '55%',
+                padding: 5,
+                marginBottom: 10
+              }}>{translation('Product Price Range (PKR)')}</Text>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                <TextInput
+                  containerStyle={[styles.priceTextField, { width: 150 }]}
+                  placeholder={translation('Rs.')}
+                  keyboardType={'numeric'}
+                  returnKeyType="next"
+                  value={props.addEditProductPrice.value}
+                  error={!!props.addEditProductPrice.error}
+                  errorText={translation(props.addEditProductPrice.error)}
+                  onChangeText={(text) =>
+                    props.setAddEditProductPrice({ value: text, error: '' })
+                  }
+                />
+                <Text style={{ justifyContent: 'center', alignSelf: 'center', marginHorizontal: 10 }}>To</Text>
+                <TextInput
+                  disabled={false}
+                  containerStyle={[styles.priceTextField, { width: 150 }]}
+                  placeholder={translation('Rs.')}
+                  keyboardType={'numeric'}
+                  returnKeyType="next"
+                  value={price2}
+                  onChangeText={(text) =>
+                    setPrice2(text)
+                  }
+                />
+              </View>
+              <View style={[styles.discountModalButtonContainer, props.addEditProductDiscountQuantity.value != '' &&
+                props.addEditProductDiscountPrice.value != '' ? null : { marginTop: 6 }]}>
+                {props.addEditProductDiscountQuantity.value != '' &&
+
+                  props.addEditProductDiscountQuantity.value > 0 &&
+                  props.addEditProductDiscountPrice.value != '' &&
+                  props.addEditProductDiscountPrice.value > 0
+                  && (
+                    <View style={styles.discountDiscription}>
+                      <Text
+                        style={styles.discountCalculationText}
+                      >{`Discount Qty >= ${props.addEditProductDiscountQuantity.value
+                        } Price = ${props.addEditProductPrice.value -
+                        (props.addEditProductPrice.value *
+                          props.addEditProductDiscountPrice.value) /
+                        100
+                        }`}</Text>
+                    </View>
+                  )}
+                <Button
+                  mode="contained"
+                  style={styles.discountModalButton}
+                  labelStyle={styles.discountModalButtonLabel}
+                  onPress={() => {
+                    props.setAddEditProductDiscountModalToggle(true);
+                  }}
+                >
+                  {`${props.addEditProductDiscountQuantity.value != '' &&
+                    props.addEditProductDiscountQuantity.value > 0 &&
+                    props.addEditProductDiscountPrice.value != ''
+                    &&
+                    props.addEditProductDiscountPrice.value > 0
+                    ? 'Edit'
+                    : 'Add'
+                    } Discount`}
+                </Button>
+              </View>
+              <DropdownTwo
+                placeholder={"UOM"}
+                visible={showDropDown}
+                showDropDown={() => setShowDropDown(true)}
+                onDismiss={() => setShowDropDown(false)}
+                value={selectedUom}
+                setValue={setSelectedUom}
+                list={uomList}
+                style={{
+                  backgroundColor: '#FFF',
+                  borderRadius: 5,
+                  height: 50,
+                  ...Platform.select({
+                    ios: {
+                      shadowColor: 'black',
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 4,
+                    },
+                    android: {
+                      elevation: 4,
+                    },
+                  }),
+                }}
+              />
+
               <TextInput
-                keyboardType='numeric'
-                containerStyle={[styles.titleTextField, { width: "100%" }]}
-                placeholder={translation('Enter Length')}
+                containerStyle={styles.titleTextField}
+                placeholder={translation('Enter Model Number')}
                 returnKeyType="next"
-                value={length}
+                value={modelNumber}
                 onChangeText={(text) =>
-                  setLength(text)
+                  setModelNumber(text)
                 }
               />
               <TextInput
-                keyboardType='numeric'
-                containerStyle={[styles.titleTextField, { width: "100%" }]}
-                placeholder={translation('Enter Width')}
+                containerStyle={styles.titleTextField}
+                placeholder={translation('Enter Batch Number')}
                 returnKeyType="next"
-                value={width}
+                value={batchNumber}
                 onChangeText={(text) =>
-                  setWidth(text)
+                  setBatchNumber(text)
                 }
               />
+
+              <ProductCategoryPopUp getACategories={getACategories} value={false} setVal={setVal} />
+              <CategoryBAutoCompleteDropDown route={props.route} />
+              <CategoryCAutoCompleteDropDown route={props.route} />
+
               <TextInput
-                containerStyle={[styles.titleTextField, { width: "100%" }]}
-                placeholder={translation('Enter Height')}
+                containerStyle={[styles.titleTextField]}
+                label={translation('Enter Product Stock')}
                 keyboardType='numeric'
-                returnKeyType="next"
-                value={height}
+                value={stock}
+                // error={stock==""}
+                // errorText={stock =="" ? "Stock cannot be zero or empty":""}
                 onChangeText={(text) =>
-                  setHeight(text)
+                  setStock(text)
                 }
               />
+              <LoadingButton
+                contentStyle={styles.submitButtonContent}
+                textStyle={styles.submitButtonText}
+                disabled={props.addEditProductLoading}
+                loading={props.addEditProductLoading}
+                mode="contained"
+                onPress={onAddPressed}
+                style={styles.submitButton}
+              >
+                {!props.addEditProductLoading && translation('Save')}
+              </LoadingButton>
+
+              <View style={{
+                alignItems: 'center',
+              }}>
+                <Text style={{
+                  marginTop: 15,
+                  fontSize: 14,
+                  color: 'white',
+                  backgroundColor: "#000000",
+                  width: '30%',
+                  padding: 10,
+                  textAlign: 'center'
+                }}>Optional</Text>
+              </View>
+              <View style={{
+                alignItems: 'center'
+              }}>
+                <TextInput
+                  keyboardType='numeric'
+                  containerStyle={[styles.titleTextField, { width: "100%" }]}
+                  placeholder={translation('Enter Length')}
+                  returnKeyType="next"
+                  value={length}
+                  onChangeText={(text) =>
+                    setLength(text)
+                  }
+                />
+                <TextInput
+                  keyboardType='numeric'
+                  containerStyle={[styles.titleTextField, { width: "100%" }]}
+                  placeholder={translation('Enter Width')}
+                  returnKeyType="next"
+                  value={width}
+                  onChangeText={(text) =>
+                    setWidth(text)
+                  }
+                />
+                <TextInput
+                  containerStyle={[styles.titleTextField, { width: "100%" }]}
+                  placeholder={translation('Enter Height')}
+                  keyboardType='numeric'
+                  returnKeyType="next"
+                  value={height}
+                  onChangeText={(text) =>
+                    setHeight(text)
+                  }
+                />
+              </View>
             </View>
           </View>
-        </View>
-        {/* <BottomDrawerContent
+          {/* <BottomDrawerContent
           onCameraPress={() => {
             //props.setVendorBottomDrawerIndex(1)
             ImagePicker.openCamera({
@@ -1122,13 +1175,11 @@ function AddEditProduct(props) {
           }}
           navigation={props.navigation}
         /> */}
+          <AddEditProductDiscountPopUp />
+        </ScrollView>
+      </BottomSheetModalProvider>
 
-
-
-        <AddEditProductDiscountPopUp />
-
-      </ScrollView>
-    </BottomSheetModalProvider>
+    }</>
   )
 }
 const mapStateToProps = (state) => {
